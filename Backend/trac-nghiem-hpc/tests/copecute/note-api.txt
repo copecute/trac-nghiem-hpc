@@ -1,0 +1,5 @@
+GET /api/khoa: Xem danh sách các khoa.
+GET /api/khoa/{id}: Xem chi tiết một khoa.
+POST /api/khoa: Thêm mới một khoa.
+PUT/PATCH /api/khoa/{id}: Cập nhật thông tin một khoa.
+DELETE /api/khoa/{id}: Xóa một khoa.
