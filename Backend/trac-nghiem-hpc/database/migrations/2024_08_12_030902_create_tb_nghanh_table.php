@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tb_Nghanh', function (Blueprint $table) {
             $table->id();                              // Tự động tăng id
-            $table->string('maNganh')->unique();       // Mã ngành là duy nhất
-            $table->string('tenNganh');
+            $table->string('maNghanh')->unique();       // Mã ngành là duy nhất
+            $table->string('tenNghanh');
             $table->unsignedBigInteger('khoa_id');     // Khóa ngoại tham chiếu đến bảng 'tb_khoa'
             $table->timestamps();
         
