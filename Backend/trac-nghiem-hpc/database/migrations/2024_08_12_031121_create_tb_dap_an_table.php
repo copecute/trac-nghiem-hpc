@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('typeText')->nullable();
             $table->string('typeAudio')->nullable();
             $table->string('typeImage')->nullable();
-            $table->boolean('dapAnDung');                
+            $table->boolean('dapAnDung')->nullable();                
             $table->unsignedBigInteger('cauhoi_id');     
             $table->timestamps();
         
