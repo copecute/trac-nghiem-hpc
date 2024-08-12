@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_Admin', function (Blueprint $table) {
-            $table->id('taiKhoan')->unique();
+        Schema::create('tb_Admin', function (Blueprint $table) {            
+            $table->id();                              // Tự động tăng id
+            $table->string('taiKhoan')->unique();
             $table->string('matKhau');
-            $table->boolean('phanQuyen');
+            $table->boolean('phanQuyen')->default(false);
             $table->timestamps();
         });
     }
