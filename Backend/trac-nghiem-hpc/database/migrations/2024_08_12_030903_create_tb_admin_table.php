@@ -4,16 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('tb_Khoa', function (Blueprint $table) {
-            $table->id();
-            $table->string('maKhoa')->unique();
-            $table->string('tenKhoa');
+        Schema::create('tb_Admin', function (Blueprint $table) {
+            $table->id('taiKhoan')->unique();
+            $table->string('matKhau');
+            $table->boolean('phanQuyen');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_Khoa');
+        Schema::dropIfExists('tb_Admin');
     }
 };
