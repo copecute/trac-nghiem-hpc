@@ -7,7 +7,7 @@ use App\Models\Khoa;
 
 class KhoaController extends Controller
 {
-    // Giao diện HTML
+    // views
 
     public function index()
     {
@@ -103,7 +103,7 @@ class KhoaController extends Controller
         if ($khoa) {
             return response()->json($khoa, 200);
         }
-        return response()->json(['message' => 'Not found'], 404);
+        return response()->json(['message' => 'Not found apiShow'], 404);
     }
 
     public function apiStore(Request $request)
@@ -129,7 +129,7 @@ class KhoaController extends Controller
             $khoa->update($request->all());
             return response()->json($khoa, 200);
         }
-        return response()->json(['message' => 'Not found'], 404);
+        return response()->json(['message' => 'Not found apiUpdate'], 404);
     }
 
     public function apiDestroy($id)
@@ -139,7 +139,7 @@ class KhoaController extends Controller
             $khoa->delete();
             return response()->json(['message' => 'Khoa deleted'], 200);
         }
-        return response()->json(['message' => 'Not found'], 404);
+        return response()->json(['message' => 'Not found apiDestroy'], 404);
     }
 
     public function apiSearch(Request $request)
