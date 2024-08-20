@@ -1,4 +1,3 @@
-<!-- resources/views/dapan/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh sách Đáp Án')

@@ -1,4 +1,3 @@
-<!-- resources/views/dethi/edit.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Sửa Đề Thi')

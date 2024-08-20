@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Danh Sách Ngành</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Danh Sách Ngành')
+
+@section('content')
     <h1>Danh Sách Ngành</h1>
 
     @if(session('success'))
@@ -12,12 +11,12 @@
         <p style="color:red;">{{ session('error') }}</p>
     @endif
 
-    <form action="{{ route('nghanh.search') }}" method="GET">
+    <form action="{{ route('nganh.search') }}" method="GET">
         <input type="text" name="search" placeholder="Tìm kiếm">
         <button type="submit">Tìm kiếm</button>
     </form>
 
-    <a href="{{ route('nghanh.create') }}">Thêm Ngành Mới</a>
+    <a href="{{ route('nganh.create') }}">Thêm Ngành Mới</a>
 
     <table border="1">
         <thead>
@@ -30,15 +29,15 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($nghanhs as $nghanh)
+            @foreach ($nganhs as $nganh)
                 <tr>
-                    <td>{{ $nghanh->id }}</td>
-                    <td>{{ $nghanh->maNghanh }}</td>
-                    <td>{{ $nghanh->tenNghanh }}</td>
-                    <td>{{ $nghanh->khoa->tenKhoa }}</td>
+                    <td>{{ $nganh->id }}</td>
+                    <td>{{ $nganh->maNganh }}</td>
+                    <td>{{ $nganh->tenNganh }}</td>
+                    <td>{{ $nganh->khoa->tenKhoa }}</td>
                     <td>
-                        <a href="{{ route('nghanh.edit', $nghanh->id) }}">Sửa</a>
-                        <form action="{{ route('nghanh.destroy', $nghanh->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('nganh.edit', $nganh->id) }}">Sửa</a>
+                        <form action="{{ route('nganh.destroy', $nganh->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit">Xóa</button>
@@ -48,5 +47,4 @@
             @endforeach
         </tbody>
     </table>
-</body>
-</html>
+@endsection

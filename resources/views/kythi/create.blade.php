@@ -1,4 +1,3 @@
-<!-- resources/views/kythi/create.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Thêm Kỳ Thi')

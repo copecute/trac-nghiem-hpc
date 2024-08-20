@@ -12,12 +12,12 @@ class MonHoc extends Model
     protected $table = 'tb_MonHoc';
 
     protected $fillable = [
-        'maMonHoc', 'tenMonHoc', 'nghanh_id',
+        'maMonHoc', 'tenMonHoc', 'nganh_id',
     ];
 
-    public function nghanh()
+    public function nganh()
     {
-        return $this->belongsTo(Nghanh::class, 'nghanh_id');
+        return $this->belongsTo(Nganh::class, 'nganh_id');
     }
 
     public function cauHois()

@@ -2,17 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable; // Đảm bảo bạn kế thừa từ Authenticatable
+use Illuminate\Notifications\Notifiable;
 
-class SinhVien extends Model
+class SinhVien extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, Notifiable;
 
     protected $table = 'tb_SinhVien';
 
     protected $fillable = [
-        'maSV', 'hoTen', 'ngaySinh', 'gioiTinh', 'diaChi', 'sdt', 'email', 'lop_id',
+        'maSV', 'hoTen', 'ngaySinh', 'gioiTinh', 'diaChi', 'sdt', 'email', 'lop_id', 'matKhau',
+    ];
+
+    protected $hidden = [
+        'matKhau',
     ];
 
     public function lop()

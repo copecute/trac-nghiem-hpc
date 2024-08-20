@@ -1,4 +1,3 @@
-<!-- resources/views/monhoc/edit.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Sửa Môn Học')
@@ -21,11 +20,11 @@
         </div>
 
         <div>
-            <label for="nghanh_id">Ngành:</label>
-            <select name="nghanh_id" id="nghanh_id" required>
-                @foreach($nghanhs as $nghanh)
-                    <option value="{{ $nghanh->id }}" {{ $monHoc->nghanh_id == $nghanh->id ? 'selected' : '' }}>
-                        {{ $nghanh->tenNghanh }}
+            <label for="nganh_id">Ngành:</label>
+            <select name="nganh_id" id="nganh_id" required>
+                @foreach($nganhs as $nganh)
+                    <option value="{{ $nganh->id }}" {{ $monHoc->nganh_id == $nganh->id ? 'selected' : '' }}>
+                        {{ $nganh->tenNganh }}
                     </option>
                 @endforeach
             </select>

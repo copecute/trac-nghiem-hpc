@@ -1,4 +1,3 @@
-<!-- resources/views/monhoc/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh sách Môn Học')
@@ -41,7 +40,7 @@
                     <td>{{ $monHoc->id }}</td>
                     <td>{{ $monHoc->maMonHoc }}</td>
                     <td>{{ $monHoc->tenMonHoc }}</td>
-                    <td>{{ $monHoc->nghanh->tenNghanh }}</td>
+                    <td>{{ $monHoc->nganh->tenNganh }}</td>
                     <td>
                         <a href="{{ route('monhoc.edit', $monHoc->id) }}">Sửa</a>
                         <form action="{{ route('monhoc.destroy', $monHoc->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline-block;">

@@ -1,10 +1,8 @@
-<!-- resources/views/khoa/edit.blade.php -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Update Khoa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Update Khoa')
+
+@section('content')
     <h1>Update Khoa</h1>
     
     <!-- Hiển thị thông báo nếu có -->
@@ -32,5 +30,4 @@
     </form>
     
     <a href="{{ route('khoa.index') }}">Back to list</a>
-</body>
-</html>
+@endsection

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tb_SinhVien', function (Blueprint $table) {
             $table->id();                              // Tự động tăng id
             $table->string('maSV')->unique();          // Mã sinh viên là duy nhất
+            $table->string('matKhau');
             $table->string('hoTen');
             $table->date('ngaySinh');
             $table->string('gioiTinh');

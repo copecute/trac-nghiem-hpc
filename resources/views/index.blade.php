@@ -51,7 +51,7 @@ span {
 }</style></head>
 <body>
 <div class="construction-message">
-<h1>Đang phát triển</h1>
+<h1><a href="{{ url('/dashboard') }}">Đang phát triển</h1>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100.001px" height="70px" viewBox="0 0 100 68">
 <g id="large">
 <g>

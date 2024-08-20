@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();                              // Tự động tăng id
             $table->string('maLop')->unique();         // Mã lớp là duy nhất
             $table->string('tenLop');
-            $table->unsignedBigInteger('nghanh_id');     // Khóa ngoại tham chiếu đến bảng nghành
+            $table->unsignedBigInteger('nganh_id');     // Khóa ngoại tham chiếu đến bảng nghành
             $table->timestamps();
         
-            $table->foreign('nghanh_id')->references('id')->on('tb_Nghanh')->onDelete('cascade');
+            $table->foreign('nganh_id')->references('id')->on('tb_Nganh')->onDelete('cascade');
         });
     }
 

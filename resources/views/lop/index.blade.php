@@ -1,4 +1,3 @@
-<!-- resources/views/lop/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh sách Lớp')
@@ -39,7 +38,7 @@
                     <td>{{ $lop->id }}</td>
                     <td>{{ $lop->maLop }}</td>
                     <td>{{ $lop->tenLop }}</td>
-                    <td>{{ $lop->nghanh->tenNghanh }}</td>
+                    <td>{{ $lop->nganh->tenNganh }}</td>
                     <td>
                         <a href="{{ route('lop.edit', $lop->id) }}">Sửa</a>
                         <form action="{{ route('lop.destroy', $lop->id) }}" method="POST" style="display:inline-block;">

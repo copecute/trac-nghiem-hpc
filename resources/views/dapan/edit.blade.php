@@ -1,4 +1,3 @@
-<!-- resources/views/dapan/edit.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Sửa Đáp Án')

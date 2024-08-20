@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SinhVien;
 use App\Models\Lop;
+use Illuminate\Support\Facades\Hash;
 
 class SinhVienController extends Controller
 {
-    // views
+    // Views
 
     public function index()
     {
@@ -20,7 +21,7 @@ class SinhVienController extends Controller
     {
         $query = SinhVien::with('lop');
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('maSV', 'LIKE', "%$search%")
                   ->orWhere('hoTen', 'LIKE', "%$search%")
@@ -41,6 +42,7 @@ class SinhVienController extends Controller
     {
         $request->validate([
             'maSV' => 'required|string|max:10|unique:tb_SinhVien',
+            'matKhau' => 'required|string|min:8', // Đảm bảo mật khẩu có độ dài tối thiểu
             'hoTen' => 'required|string|max:255',
             'ngaySinh' => 'required|date',
             'gioiTinh' => 'required|string|max:10',
@@ -49,9 +51,20 @@ class SinhVienController extends Controller
             'email' => 'required|string|email|max:255|unique:tb_SinhVien',
             'lop_id' => 'required|exists:tb_Lop,id',
         ]);
-
-        SinhVien::create($request->all());
-        return redirect()->route('sinhvien.index')->with('success', 'Sinh viên added successfully');
+    
+        SinhVien::create([
+            'maSV' => $request->maSV,
+            'matKhau' => Hash::make($request->matKhau), // Mã hóa mật khẩu
+            'hoTen' => $request->hoTen,
+            'ngaySinh' => $request->ngaySinh,
+            'gioiTinh' => $request->gioiTinh,
+            'diaChi' => $request->diaChi,
+            'sdt' => $request->sdt,
+            'email' => $request->email,
+            'lop_id' => $request->lop_id,
+        ]);
+    
+        return redirect()->route('sinhvien.index')->with('success', 'Sinh viên đã được thêm thành công');
     }
 
     public function edit($id)
@@ -62,13 +75,15 @@ class SinhVienController extends Controller
         if ($sinhVien) {
             return view('sinhvien.edit', compact('sinhVien', 'lops'));
         }
-        return redirect()->route('sinhvien.index')->with('error', 'Sinh viên not found');
+
+        return redirect()->route('sinhvien.index')->with('error', 'Sinh viên không tìm thấy');
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'maSV' => 'required|string|max:10|unique:tb_SinhVien,maSV,' . $id,
+            'matKhau' => 'nullable|string|min:6', // Mật khẩu có thể là null
             'hoTen' => 'required|string|max:255',
             'ngaySinh' => 'required|date',
             'gioiTinh' => 'required|string|max:10',
@@ -77,23 +92,42 @@ class SinhVienController extends Controller
             'email' => 'required|string|email|max:255|unique:tb_SinhVien,email,' . $id,
             'lop_id' => 'required|exists:tb_Lop,id',
         ]);
-
+    
         $sinhVien = SinhVien::find($id);
+    
         if ($sinhVien) {
-            $sinhVien->update($request->all());
-            return redirect()->route('sinhvien.index')->with('success', 'Sinh viên updated successfully');
+            $sinhVien->update([
+                'maSV' => $request->maSV,
+                'hoTen' => $request->hoTen,
+                'ngaySinh' => $request->ngaySinh,
+                'gioiTinh' => $request->gioiTinh,
+                'diaChi' => $request->diaChi,
+                'sdt' => $request->sdt,
+                'email' => $request->email,
+                'lop_id' => $request->lop_id,
+            ]);
+    
+            // Cập nhật mật khẩu chỉ nếu có thay đổi
+            if ($request->filled('matKhau')) {
+                $sinhVien->update(['matKhau' => Hash::make($request->matKhau)]);
+            }
+    
+            return redirect()->route('sinhvien.index')->with('success', 'Sinh viên đã được cập nhật thành công');
         }
-        return redirect()->route('sinhvien.index')->with('error', 'Sinh viên not found');
+    
+        return redirect()->route('sinhvien.index')->with('error', 'Sinh viên không tìm thấy');
     }
 
     public function destroy($id)
     {
         $sinhVien = SinhVien::find($id);
+
         if ($sinhVien) {
             $sinhVien->delete();
-            return redirect()->route('sinhvien.index')->with('success', 'Sinh viên deleted successfully');
+            return redirect()->route('sinhvien.index')->with('success', 'Sinh viên đã được xóa thành công');
         }
-        return redirect()->route('sinhvien.index')->with('error', 'Sinh viên not found');
+
+        return redirect()->route('sinhvien.index')->with('error', 'Sinh viên không tìm thấy');
     }
 
     // API JSON
@@ -102,7 +136,7 @@ class SinhVienController extends Controller
     {
         $query = SinhVien::with('lop');
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('maSV', 'LIKE', "%$search%")
                   ->orWhere('hoTen', 'LIKE', "%$search%")
@@ -119,13 +153,15 @@ class SinhVienController extends Controller
         if ($sinhVien) {
             return response()->json($sinhVien, 200);
         }
-        return response()->json(['message' => 'Not found apiShow'], 404);
+
+        return response()->json(['message' => 'Không tìm thấy'], 404);
     }
 
     public function apiStore(Request $request)
     {
         $request->validate([
             'maSV' => 'required|string|max:10|unique:tb_SinhVien',
+            'matKhau' => 'required|string|max:255',
             'hoTen' => 'required|string|max:255',
             'ngaySinh' => 'required|date',
             'gioiTinh' => 'required|string|max:10',
@@ -135,7 +171,18 @@ class SinhVienController extends Controller
             'lop_id' => 'required|exists:tb_Lop,id',
         ]);
 
-        $sinhVien = SinhVien::create($request->all());
+        $sinhVien = SinhVien::create([
+            'maSV' => $request->maSV,
+            'hoTen' => $request->hoTen,
+            'ngaySinh' => $request->ngaySinh,
+            'gioiTinh' => $request->gioiTinh,
+            'diaChi' => $request->diaChi,
+            'sdt' => $request->sdt,
+            'email' => $request->email,
+            'lop_id' => $request->lop_id,
+            'matKhau' => Hash::make($request->matKhau),
+        ]);
+
         return response()->json($sinhVien, 201);
     }
 
@@ -154,10 +201,21 @@ class SinhVienController extends Controller
 
         $sinhVien = SinhVien::find($id);
         if ($sinhVien) {
-            $sinhVien->update($request->all());
+            $sinhVien->update([
+                'maSV' => $request->maSV,
+                'hoTen' => $request->hoTen,
+                'ngaySinh' => $request->ngaySinh,
+                'gioiTinh' => $request->gioiTinh,
+                'diaChi' => $request->diaChi,
+                'sdt' => $request->sdt,
+                'email' => $request->email,
+                'lop_id' => $request->lop_id,
+            ]);
+
             return response()->json($sinhVien, 200);
         }
-        return response()->json(['message' => 'Not found apiUpdate'], 404);
+
+        return response()->json(['message' => 'Không tìm thấy'], 404);
     }
 
     public function apiDestroy($id)
@@ -165,16 +223,17 @@ class SinhVienController extends Controller
         $sinhVien = SinhVien::find($id);
         if ($sinhVien) {
             $sinhVien->delete();
-            return response()->json(['message' => 'Sinh viên deleted'], 200);
+            return response()->json(['message' => 'Sinh viên đã được xóa'], 200);
         }
-        return response()->json(['message' => 'Not found apiDestroy'], 404);
+
+        return response()->json(['message' => 'Không tìm thấy'], 404);
     }
 
     public function apiSearch(Request $request)
     {
         $query = SinhVien::with('lop');
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('maSV', 'LIKE', "%$search%")
                   ->orWhere('hoTen', 'LIKE', "%$search%")

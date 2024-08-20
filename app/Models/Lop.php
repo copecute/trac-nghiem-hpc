@@ -10,11 +10,11 @@ class Lop extends Model
     use HasFactory;
 
     protected $table = 'tb_Lop';
-    protected $fillable = ['maLop', 'tenLop', 'nghanh_id'];
+    protected $fillable = ['maLop', 'tenLop', 'nganh_id'];
 
-    public function nghanh()
+    public function nganh()
     {
-        return $this->belongsTo(Nghanh::class);
+        return $this->belongsTo(Nganh::class);
     }
 
     public function sinhViens()

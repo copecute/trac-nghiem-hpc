@@ -1,4 +1,3 @@
-<!-- resources/views/dethi/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh Sách Đề Thi')

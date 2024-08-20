@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Đăng ký')
+
+@section('content')
     <h1>Register</h1>
 
     @if (session('success'))
@@ -30,5 +29,4 @@
         <br>
         <button type="submit">Register</button>
     </form>
-</body>
-</html>
+@endsection

@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách Ca Thi</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Danh sách Ca Thi')
+
+@section('content')
     <h1>Danh sách Ca Thi</h1>
     <a href="{{ route('cathi.create', ['kythi_id' => $kythi_id]) }}">Thêm mới</a>
     <form action="{{ route('cathi.index', ['kythi_id' => $kythi_id]) }}" method="GET">
@@ -53,5 +50,4 @@
             @endforeach
         </tbody>
     </table>
-</body>
-</html>
+@endsection

@@ -1,4 +1,3 @@
-<!-- resources/views/lop/edit.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Sửa Lớp')
@@ -30,11 +29,11 @@
         </div>
 
         <div>
-            <label for="nghanh_id">Ngành:</label>
-            <select name="nghanh_id" id="nghanh_id" required>
-                @foreach($nghanhs as $nghanh)
-                    <option value="{{ $nghanh->id }}" {{ $nghanh->id == $lop->nghanh_id ? 'selected' : '' }}>
-                        {{ $nghanh->tenNghanh }}
+            <label for="nganh_id">Ngành:</label>
+            <select name="nganh_id" id="nganh_id" required>
+                @foreach($nganhs as $nganh)
+                    <option value="{{ $nganh->id }}" {{ $nganh->id == $lop->nganh_id ? 'selected' : '' }}>
+                        {{ $nganh->tenNganh }}
                     </option>
                 @endforeach
             </select>

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_Nghanh', function (Blueprint $table) {
+        Schema::create('tb_Nganh', function (Blueprint $table) {
             $table->id();                              // Tự động tăng id
-            $table->string('maNghanh')->unique();       // Mã ngành là duy nhất
-            $table->string('tenNghanh');
+            $table->string('maNganh')->unique();       // Mã ngành là duy nhất
+            $table->string('tenNganh');
             $table->unsignedBigInteger('khoa_id');     // Khóa ngoại tham chiếu đến bảng 'tb_khoa'
             $table->timestamps();
         
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_Nghanh');
+        Schema::dropIfExists('tb_Nganh');
     }
 };

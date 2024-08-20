@@ -1,4 +1,3 @@
-<!-- resources/views/cauhoi/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh sách Câu Hỏi')

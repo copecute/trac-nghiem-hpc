@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Đăng nhập')
+
+@section('content')
     <h1>Login</h1>
 
     @if (session('success'))
@@ -30,5 +29,4 @@
         <br>
         <button type="submit">Login</button>
     </form>
-</body>
-</html>
+@endsection

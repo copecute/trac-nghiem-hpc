@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Ca Thi</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Thêm Ca Thi')
+
+@section('content')
     <h1>Thêm Ca Thi</h1>
     <form action="{{ route('cathi.store', ['kythi_id' => $kythi_id]) }}" method="POST">
         @csrf
@@ -24,5 +21,4 @@
         <button type="submit">Thêm</button>
     </form>
     <a href="{{ route('cathi.index', ['kythi_id' => $kythi_id]) }}">Quay lại</a>
-</body>
-</html>
+@endsection

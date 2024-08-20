@@ -1,4 +1,3 @@
-<!-- resources/views/phongthi/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh Sách Phòng Thi')

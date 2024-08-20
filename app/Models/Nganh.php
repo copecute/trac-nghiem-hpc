@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Nghanh extends Model
+class Nganh extends Model
 {
     use HasFactory;
     
-    protected $table = 'tb_Nghanh';
+    protected $table = 'tb_Nganh';
 
-    protected $fillable = ['maNghanh', 'tenNghanh', 'khoa_id'];
+    protected $fillable = ['maNganh', 'tenNganh', 'khoa_id'];
 
     public function khoa()
     {
@@ -25,6 +25,6 @@ class Nghanh extends Model
 
     public function monHocs()
     {
-        return $this->hasMany(MonHoc::class, 'nghanh_id');
+        return $this->hasMany(MonHoc::class, 'nganh_id');
     }
 }

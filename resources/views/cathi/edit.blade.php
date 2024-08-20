@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sửa Ca Thi</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Sửa Cá Thi')
+
+@section('content')
     <h1>Sửa Ca Thi</h1>
     <form action="{{ route('cathi.update', ['kythi_id' => $kythi_id, 'id' => $cathi->id]) }}" method="POST">
         @csrf
@@ -25,5 +22,4 @@
         <button type="submit">Cập Nhật</button>
     </form>
     <a href="{{ route('cathi.index', ['kythi_id' => $kythi_id]) }}">Quay lại</a>
-</body>
-</html>
+@endsection

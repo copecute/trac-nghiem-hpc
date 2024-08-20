@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MonHoc;
-use App\Models\Nghanh;
+use App\Models\Nganh;
 
 class MonHocController extends Controller
 {
@@ -11,13 +11,13 @@ class MonHocController extends Controller
 
     public function index()
     {
-        $monHocs = MonHoc::with('nghanh:id,tenNghanh')->select('id', 'maMonHoc', 'tenMonHoc', 'nghanh_id')->get();
+        $monHocs = MonHoc::with('nganh:id,tenNganh')->select('id', 'maMonHoc', 'tenMonHoc', 'nganh_id')->get();
         return view('monhoc.index', compact('monHocs'));
     }
 
     public function search(Request $request)
     {
-        $query = MonHoc::with('nghanh:id,tenNghanh')->select('id', 'maMonHoc', 'tenMonHoc', 'nghanh_id');
+        $query = MonHoc::with('nganh:id,tenNganh')->select('id', 'maMonHoc', 'tenMonHoc', 'nganh_id');
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -31,8 +31,8 @@ class MonHocController extends Controller
 
     public function create()
     {
-        $nghanhs = Nghanh::select('id', 'tenNghanh')->get();
-        return view('monhoc.create', compact('nghanhs'));
+        $nganhs = Nganh::select('id', 'tenNganh')->get();
+        return view('monhoc.create', compact('nganhs'));
     }
 
     public function store(Request $request)
@@ -40,7 +40,7 @@ class MonHocController extends Controller
         $request->validate([
             'maMonHoc' => 'required|string|max:10',
             'tenMonHoc' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         MonHoc::create($request->all());
@@ -50,10 +50,10 @@ class MonHocController extends Controller
     public function edit($id)
     {
         $monHoc = MonHoc::find($id);
-        $nghanhs = Nghanh::select('id', 'tenNghanh')->get();
+        $nganhs = Nganh::select('id', 'tenNganh')->get();
 
         if ($monHoc) {
-            return view('monhoc.edit', compact('monHoc', 'nghanhs'));
+            return view('monhoc.edit', compact('monHoc', 'nganhs'));
         }
         return redirect()->route('monhoc.index')->with('error', 'Môn học không tồn tại');
     }
@@ -63,7 +63,7 @@ class MonHocController extends Controller
         $request->validate([
             'maMonHoc' => 'required|string|max:10',
             'tenMonHoc' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         $monHoc = MonHoc::find($id);
@@ -88,7 +88,7 @@ class MonHocController extends Controller
 
     public function apiIndex(Request $request)
     {
-        $query = MonHoc::select('id', 'maMonHoc', 'tenMonHoc', 'nghanh_id');
+        $query = MonHoc::select('id', 'maMonHoc', 'tenMonHoc', 'nganh_id');
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -102,7 +102,7 @@ class MonHocController extends Controller
 
     public function apiShow($id)
     {
-        $monHoc = MonHoc::select('id', 'maMonHoc', 'tenMonHoc', 'nghanh_id')->find($id);
+        $monHoc = MonHoc::select('id', 'maMonHoc', 'tenMonHoc', 'nganh_id')->find($id);
         if ($monHoc) {
             return response()->json($monHoc, 200);
         }
@@ -114,7 +114,7 @@ class MonHocController extends Controller
         $request->validate([
             'maMonHoc' => 'required|string|max:10',
             'tenMonHoc' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         $monHoc = MonHoc::create($request->all());
@@ -126,7 +126,7 @@ class MonHocController extends Controller
         $request->validate([
             'maMonHoc' => 'required|string|max:10',
             'tenMonHoc' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         $monHoc = MonHoc::find($id);

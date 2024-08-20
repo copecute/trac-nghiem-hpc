@@ -1,4 +1,3 @@
-<!-- resources/views/sinhvien/create.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Thêm Sinh Viên Mới')
@@ -21,6 +20,11 @@
         <div>
             <label for="maSV">Mã SV:</label>
             <input type="text" name="maSV" id="maSV" required>
+        </div>
+
+        <div>
+            <label for="matKhau">Mật khẩu:</label>
+            <input type="password" name="matKhau" id="matKhau" required>
         </div>
 
         <div>

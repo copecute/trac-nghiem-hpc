@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Danh sách Khoa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Danh Sách Khoa')
+
+@section('content')
     <h1>Danh sách Khoa</h1>
 
     <!-- Form tìm kiếm -->
@@ -41,5 +40,4 @@
             @endforeach
         </tbody>
     </table>
-</body>
-</html>
+@endsection

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Controllers\KhoaController;
-use App\Http\Controllers\NghanhController;
+use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
 use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\MonHocController;
@@ -19,6 +19,10 @@ use App\Http\Controllers\PhongThiController;
 
 Route::get('/', function () {
     return view('index');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
 });
 
 // admin login 
@@ -43,13 +47,13 @@ Route::get('/khoa', [KhoaController::class, 'index'])->name('khoa.index');
 //});
 
 // Nghành
-Route::get('/nghanh', [NghanhController::class, 'index'])->name('nghanh.index');
-Route::get('/nghanh/search', [NghanhController::class, 'search'])->name('nghanh.search');
-Route::get('/nghanh/create', [NghanhController::class, 'create'])->name('nghanh.create');
-Route::post('/nghanh', [NghanhController::class, 'store'])->name('nghanh.store');
-Route::get('/nghanh/{id}/edit', [NghanhController::class, 'edit'])->name('nghanh.edit');
-Route::put('/nghanh/{id}', [NghanhController::class, 'update'])->name('nghanh.update');
-Route::delete('/nghanh/{id}', [NghanhController::class, 'destroy'])->name('nghanh.destroy');
+Route::get('/nganh', [NganhController::class, 'index'])->name('nganh.index');
+Route::get('/nganh/search', [NganhController::class, 'search'])->name('nganh.search');
+Route::get('/nganh/create', [NganhController::class, 'create'])->name('nganh.create');
+Route::post('/nganh', [NganhController::class, 'store'])->name('nganh.store');
+Route::get('/nganh/{id}/edit', [NganhController::class, 'edit'])->name('nganh.edit');
+Route::put('/nganh/{id}', [NganhController::class, 'update'])->name('nganh.update');
+Route::delete('/nganh/{id}', [NganhController::class, 'destroy'])->name('nganh.destroy');
 
 // lớp
 Route::get('/lop', [LopController::class, 'index'])->name('lop.index');

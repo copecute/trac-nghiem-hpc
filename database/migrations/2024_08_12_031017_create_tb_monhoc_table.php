@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();                              // Tự động tăng id
             $table->string('maMonHoc')->unique();      // Mã môn học là duy nhất
             $table->string('tenMonHoc');
-            $table->unsignedBigInteger('nghanh_id');    // Khóa ngoại tham chiếu đến bảng nghanh
+            $table->unsignedBigInteger('nganh_id');    // Khóa ngoại tham chiếu đến bảng nganh
             $table->timestamps();
         
-            $table->foreign('nghanh_id')->references('id')->on('tb_Nghanh')->onDelete('cascade');
+            $table->foreign('nganh_id')->references('id')->on('tb_Nganh')->onDelete('cascade');
         });
         
     }

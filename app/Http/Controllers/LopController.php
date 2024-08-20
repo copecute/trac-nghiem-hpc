@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Lop;
-use App\Models\Nghanh;
+use App\Models\Nganh;
 
 class LopController extends Controller
 {
@@ -11,13 +11,13 @@ class LopController extends Controller
 
     public function index()
     {
-        $lops = Lop::with('nghanh')->select('id', 'maLop', 'tenLop', 'nghanh_id')->get();
+        $lops = Lop::with('nganh')->select('id', 'maLop', 'tenLop', 'nganh_id')->get();
         return view('lop.index', compact('lops'));
     }
 
     public function search(Request $request)
     {
-        $query = Lop::with('nghanh')->select('id', 'maLop', 'tenLop', 'nghanh_id');
+        $query = Lop::with('nganh')->select('id', 'maLop', 'tenLop', 'nganh_id');
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -31,8 +31,8 @@ class LopController extends Controller
 
     public function create()
     {
-        $nghanhs = Nghanh::select('id', 'tenNghanh')->get();
-        return view('lop.create', compact('nghanhs'));
+        $nganhs = Nganh::select('id', 'tenNganh')->get();
+        return view('lop.create', compact('nganhs'));
     }
 
     public function store(Request $request)
@@ -40,7 +40,7 @@ class LopController extends Controller
         $request->validate([
             'maLop' => 'required|string|max:10',
             'tenLop' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         Lop::create($request->all());
@@ -50,10 +50,10 @@ class LopController extends Controller
     public function edit($id)
     {
         $lop = Lop::find($id);
-        $nghanhs = Nghanh::select('id', 'tenNghanh')->get();
+        $nganhs = Nganh::select('id', 'tenNganh')->get();
 
         if ($lop) {
-            return view('lop.edit', compact('lop', 'nghanhs'));
+            return view('lop.edit', compact('lop', 'nganhs'));
         }
         return redirect()->route('lop.index')->with('error', 'Lop not found');
     }
@@ -63,7 +63,7 @@ class LopController extends Controller
         $request->validate([
             'maLop' => 'required|string|max:10',
             'tenLop' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         $lop = Lop::find($id);
@@ -88,7 +88,7 @@ class LopController extends Controller
 
     public function apiIndex(Request $request)
     {
-        $query = Lop::with('nghanh')->select('id', 'maLop', 'tenLop', 'nghanh_id');
+        $query = Lop::with('nganh')->select('id', 'maLop', 'tenLop', 'nganh_id');
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -102,7 +102,7 @@ class LopController extends Controller
 
     public function apiShow($id)
     {
-        $lop = Lop::with('nghanh')->select('id', 'maLop', 'tenLop', 'nghanh_id')->find($id);
+        $lop = Lop::with('nganh')->select('id', 'maLop', 'tenLop', 'nganh_id')->find($id);
         if ($lop) {
             return response()->json($lop, 200);
         }
@@ -114,7 +114,7 @@ class LopController extends Controller
         $request->validate([
             'maLop' => 'required|string|max:10',
             'tenLop' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         $lop = Lop::create($request->all());
@@ -126,7 +126,7 @@ class LopController extends Controller
         $request->validate([
             'maLop' => 'required|string|max:10',
             'tenLop' => 'required|string|max:255',
-            'nghanh_id' => 'required|exists:tb_Nghanh,id',
+            'nganh_id' => 'required|exists:tb_Nganh,id',
         ]);
 
         $lop = Lop::find($id);
@@ -149,7 +149,7 @@ class LopController extends Controller
 
     public function apiSearch(Request $request)
     {
-        $query = Lop::with('nghanh')->select('id', 'maLop', 'tenLop', 'nghanh_id');
+        $query = Lop::with('nganh')->select('id', 'maLop', 'tenLop', 'nganh_id');
 
         if ($request->has('search')) {
             $search = $request->input('search');

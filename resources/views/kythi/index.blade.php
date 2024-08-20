@@ -1,4 +1,3 @@
-<!-- resources/views/kythi/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh sách Kỳ Thi')

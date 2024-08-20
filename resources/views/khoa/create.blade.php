@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thêm Mới Khoa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Thêm mới Khoa')
+
+@section('content')
     <h1>Thêm Mới Khoa</h1>
 
     <!-- thông báo -->
@@ -30,5 +29,4 @@
     </form>
 
     <a href="{{ route('khoa.index') }}">Trở Lại Danh Sách</a>
-</body>
-</html>
+@endsection

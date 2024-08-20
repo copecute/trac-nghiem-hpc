@@ -1,10 +1,11 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Sanctum;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Controllers\KhoaController;
-use App\Http\Controllers\NghanhController;
+use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
-use App\Http\Controllers\SinhVienController;
+use App\Http\Controllers\SinhVienAuthController;
 use App\Http\Controllers\MonHocController;
 use App\Http\Controllers\CauHoiController;
 use App\Http\Controllers\DapAnController;
@@ -14,13 +15,21 @@ use App\Http\Controllers\DeThiController;
 use App\Http\Controllers\KetQuaController;
 use App\Http\Controllers\PhongThiController;
 
+
 Route::get('/', function () {
     return view('index');
 });
 
-// Khoi tao middleware check permission
+// Route đăng nhập cho sinh viên
+Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
+
+// xác thực bằng middleware auth:sanctum
 // khoa
-Route::get('/khoa', [KhoaController::class, 'apiIndex']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/khoa', [KhoaController::class, 'apiIndex']);
+});
+
 Route::get('/khoa/{id}', [KhoaController::class, 'apiShow']);
 // đăng nhập mới đc truy cập
 //Route::middleware('auth')->group(function () {
@@ -38,12 +47,12 @@ Route::get('/khoa/{id}', [KhoaController::class, 'apiShow']);
 
 
 // Nghành
-Route::get('/nghanh', [NghanhController::class, 'apiIndex']);
-Route::get('/nghanh/{id}', [NghanhController::class, 'apiShow']);
-Route::post('/nghanh', [NghanhController::class, 'apiStore']);
-Route::put('/nghanh/{id}', [NghanhController::class, 'apiUpdate']);
-Route::delete('/nghanh/{id}', [NghanhController::class, 'apiDestroy']);
-Route::get('/nghanh/search', [NghanhController::class, 'apiSearch']);
+Route::get('/nganh', [NganhController::class, 'apiIndex']);
+Route::get('/nganh/{id}', [NganhController::class, 'apiShow']);
+Route::post('/nganh', [NganhController::class, 'apiStore']);
+Route::put('/nganh/{id}', [NganhController::class, 'apiUpdate']);
+Route::delete('/nganh/{id}', [NganhController::class, 'apiDestroy']);
+Route::get('/nganh/search', [NganhController::class, 'apiSearch']);
 
 // lớp
 Route::get('/lop', [LopController::class, 'apiIndex']);
@@ -53,15 +62,6 @@ Route::post('/lop', [LopController::class, 'apiStore']);
 Route::put('/lop/{id}', [LopController::class, 'apiUpdate']);
 Route::delete('/lop/{id}', [LopController::class, 'apiDestroy']);
 
-// Sinh viên
-Route::prefix('sinhvien')->group(function () {
-    Route::get('/', [SinhVienController::class, 'apiIndex']);
-    Route::get('/{id}', [SinhVienController::class, 'apiShow']);
-    Route::post('/', [SinhVienController::class, 'apiStore']);
-    Route::put('/{id}', [SinhVienController::class, 'apiUpdate']);
-    Route::delete('/{id}', [SinhVienController::class, 'apiDestroy']);
-    Route::get('/search', [SinhVienController::class, 'apiSearch']);
-});
 
 // Môn học
 Route::prefix('monhoc')->group(function () {
