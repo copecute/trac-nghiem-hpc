@@ -20,7 +20,6 @@
 
 ## Cài Đặt và Cấu Hình
 
-### Bước 1: Clone dự án
 ```bash
 git clone [https://github.com/your-repo-url/hpc-thi-trac-nghiem.git](https://github.com/copecute/trac-nghiem-hpc.git)
 cd hpc-thi-trac-nghiem
