@@ -1,7 +1,7 @@
 # Ứng Dụng Thi Trắc Nghiệm - HPC
 
 ## Giới Thiệu
-Đây là một ứng dụng thi trắc nghiệm dành cho sinh viên của trường Cao Đẳng Công Nghệ Bách Khoa Hà Nội (HPC). Ứng dụng được phát triển nhằm giúp nhà trường tổ chức các kỳ thi online một cách hiệu quả, với các tính năng quản lý sinh viên, câu hỏi và kết quả thi.
+Đây là một ứng dụng thi trắc nghiệm dành cho sinh viên của trường Cao Đẳng Công Nghệ Bách Khoa Hà Nội (HPC). Ứng dụng được phát triển nhằm giúp nhà trường tổ chức các kỳ thi một cách hiệu quả, với các tính năng quản lý sinh viên, câu hỏi và kết quả thi.
 
 ## Công Nghệ Sử Dụng
 - **Backend**: Laravel 11 (PHP Framework)
