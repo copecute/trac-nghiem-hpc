@@ -73,6 +73,7 @@ Route::prefix('monhoc')->group(function () {
 });
 
 // câu hỏi
+Route::middleware('auth:sanctum')->group(function () {
 Route::get('/cauhoi', [CauHoiController::class, 'apiIndex']);
 Route::get('/cauhoi/{id}', [CauHoiController::class, 'apiShow']);
 Route::post('/cauhoi', [CauHoiController::class, 'apiStore']);
@@ -85,6 +86,7 @@ Route::get('/cauhoi/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiShow'])
 Route::post('/cauhoi/{cauHoiId}/dapan', [DapAnController::class, 'apiStore']);
 Route::put('/cauhoi/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiUpdate']);
 Route::delete('/cauhoi/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiDestroy']);
+});
 
 // kỳ thi
 Route::prefix('kythi')->group(function () {

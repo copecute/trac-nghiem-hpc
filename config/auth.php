@@ -37,14 +37,15 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
-            'provider' => 'admins',
+            'driver' => 'session', // Guard 'web' sử dụng driver 'session' để quản lý phiên làm việc của người dùng
+            'provider' => 'admins', // Sử dụng provider 'admins' để lấy thông tin người dùng từ nguồn dữ liệu
         ],
         'api' => [
-        'driver' => 'sanctum',
-        'provider' => 'users',
+            'driver' => 'sanctum', // Guard 'api' sử dụng driver 'sanctum' để xác thực API thông qua token
+            'provider' => 'users', // Sử dụng provider 'users' để lấy thông tin người dùng từ nguồn dữ liệu
+        ],
     ],
-    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -65,8 +66,8 @@ return [
 
     'providers' => [
         'admins' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'driver' => 'eloquent', // Sử dụng driver 'eloquent' để lấy thông tin người dùng thông qua mô hình Eloquent
+            'model' => App\Models\Admin::class, // Mô hình Eloquent đại diện cho bảng người dùng admin trong cơ sở dữ liệu
         ],
 
         // 'users' => [
@@ -74,6 +75,7 @@ return [
         //     'table' => 'users',
         // ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
