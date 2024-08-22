@@ -6,6 +6,7 @@ use App\Http\Controllers\KhoaController;
 use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
 use App\Http\Controllers\SinhVienAuthController;
+use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\MonHocController;
 use App\Http\Controllers\CauHoiController;
 use App\Http\Controllers\DapAnController;
@@ -22,6 +23,16 @@ Route::get('/', function () {
 
 // Route đăng nhập cho sinh viên
 Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
+
+// Sinh viên
+Route::prefix('sinhvien')->group(function () {
+    Route::get('/', [SinhVienController::class, 'apiIndex']);
+    Route::get('/{id}', [SinhVienController::class, 'apiShow']);
+    Route::post('/', [SinhVienController::class, 'apiStore']);
+    Route::put('/{id}', [SinhVienController::class, 'apiUpdate']);
+    Route::delete('/{id}', [SinhVienController::class, 'apiDestroy']);
+    Route::get('/search', [SinhVienController::class, 'apiSearch']);
+});
 
 // xác thực bằng middleware auth:sanctum
 // khoa
@@ -52,7 +63,7 @@ Route::get('/nganh/{id}', [NganhController::class, 'apiShow']);
 Route::post('/nganh', [NganhController::class, 'apiStore']);
 Route::put('/nganh/{id}', [NganhController::class, 'apiUpdate']);
 Route::delete('/nganh/{id}', [NganhController::class, 'apiDestroy']);
-Route::get('/nganh/search', [NganhController::class, 'apiSearch']);
+Route::get('/nganh?search', [NganhController::class, 'apiSearch']);
 
 // lớp
 Route::get('/lop', [LopController::class, 'apiIndex']);
