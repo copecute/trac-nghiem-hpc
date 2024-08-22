@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\Sanctum;
 use App\Http\Middleware\CheckPermission;
+use App\Http\Middleware\ApiAuthenticate;
 use App\Http\Controllers\KhoaController;
 use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
@@ -25,34 +25,37 @@ Route::get('/', function () {
 Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
 
 // Sinh viên
-Route::prefix('sinhvien')->group(function () {
-    Route::get('/', [SinhVienController::class, 'apiIndex']);
-    Route::get('/{id}', [SinhVienController::class, 'apiShow']);
-    Route::post('/', [SinhVienController::class, 'apiStore']);
-    Route::put('/{id}', [SinhVienController::class, 'apiUpdate']);
-    Route::delete('/{id}', [SinhVienController::class, 'apiDestroy']);
-    Route::get('/search', [SinhVienController::class, 'apiSearch']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('sinhvien')->group(function () {
+        Route::get('/', [SinhVienController::class, 'apiIndex']);
+        Route::get('/{id}', [SinhVienController::class, 'apiShow']);
+        Route::post('/', [SinhVienController::class, 'apiStore']);
+        Route::put('/{id}', [SinhVienController::class, 'apiUpdate']);
+        Route::delete('/{id}', [SinhVienController::class, 'apiDestroy']);
+        Route::get('/search', [SinhVienController::class, 'apiSearch']);
+    });
 });
 
 // xác thực bằng middleware auth:sanctum
 // khoa
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/khoa', [KhoaController::class, 'apiIndex']);
+Route::middleware([ApiAuthenticate::class])->group(function () {
+    Route::prefix('khoa')->group(function () {
+        Route::get('/', [KhoaController::class, 'apiIndex']);
+        Route::get('//{id}', [KhoaController::class, 'apiShow']);
+        Route::post('/', [KhoaController::class, 'apiStore']);
+        Route::put('/{id}', [KhoaController::class, 'apiUpdate']);
+        Route::delete('/{id}', [KhoaController::class, 'apiDestroy']);
+        Route::get('?search', [KhoaController::class, 'apiSearch']);
+    });
 });
 
-Route::get('/khoa/{id}', [KhoaController::class, 'apiShow']);
 // đăng nhập mới đc truy cập
 //Route::middleware('auth')->group(function () {
     // có quyền admin mới được truy cập
   //  Route::middleware([CheckPermission::class . ':admin'])->group(function () {
-        Route::post('/khoa', [KhoaController::class, 'apiStore']);
-        Route::put('/khoa/{id}', [KhoaController::class, 'apiUpdate']);
-        Route::delete('/khoa/{id}', [KhoaController::class, 'apiDestroy']);
     //});
     // có quyền user là được truy cập
     //Route::middleware([CheckPermission::class . ':user'])->group(function () {
-        Route::get('/khoa?search', [KhoaController::class, 'apiSearch']);
     //});
 //});
 

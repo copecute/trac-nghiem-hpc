@@ -7,7 +7,7 @@
 - **Backend**: Laravel 11 (PHP Framework)
 - **Frontend**: HTML, CSS, JavaScript
 - **Cơ sở dữ liệu**: MySQL
-- **Client-Side**: C#
+- **Client-Side**: Winform C#
 - **API Authentication**: Laravel Sanctum
 
 ## Chức Năng
@@ -21,7 +21,7 @@
 ## Cài Đặt và Cấu Hình
 
 ```bash
-git clone [https://github.com/your-repo-url/hpc-thi-trac-nghiem.git](https://github.com/copecute/trac-nghiem-hpc.git)
+git clone https://github.com/your-repo-url/hpc-thi-trac-nghiem.git](https://github.com/copecute/trac-nghiem-hpc.git
 cd hpc-thi-trac-nghiem
 composer install
 npm install
