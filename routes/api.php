@@ -36,9 +36,10 @@ Route::middleware([ApiAuthenticate::class])->group(function () {
         // Route::delete('/{id}', [SinhVienController::class, 'apiDestroy']); // xoá sinh viên
         Route::get('/search', [SinhVienController::class, 'apiSearch']); // tìm kiếm sinh viên
         
-        // kết quả bài thi
-        Route::get('/{sinhvienId}/ketqua/{dethiId}', [KetQuaController::class, 'show'])->name('api.ketqua.show');
+        Route::get('/{sinhvienId}/ketqua/{dethiId}', [KetQuaController::class, 'show'])->name('api.ketqua.show'); // kết quả bài thi
     });
+
+    Route::post('/ketqua', [KetQuaController::class, 'store']); // API thêm kết quả (sinhvien_id sẽ được lấy từ phiên đăng nhập)
 
     // khoa
     Route::prefix('khoa')->group(function () {
@@ -67,7 +68,7 @@ Route::middleware([ApiAuthenticate::class])->group(function () {
         // Route::post('/', [LopController::class, 'apiStore']); // thêm lớp
         // Route::put('/{id}', [LopController::class, 'apiUpdate']); // sửa lớp
         // Route::delete('/{id}', [LopController::class, 'apiDestroy']); // xoá lớp
-        Route::get('/timkiem', [LopController::class, 'apiSearch']); // tìm kiếm lớp
+        Route::get('?search', [LopController::class, 'apiSearch']); // tìm kiếm lớp
     });
     
     // Môn học

@@ -25,44 +25,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\KetQua;
-use App\Models\SinhVien;
 use App\Models\DeThi;
+use Illuminate\Support\Facades\Auth;
 
 class KetQuaController extends Controller
 {
     // Xem kết quả của sinh viên cho một đề thi qua API
     public function show($sinhvienId, $dethiId)
     {
-        // Tìm kết quả của sinh viên với ID và đề thi được chỉ định
         $ketQua = KetQua::where('sinhvien_id', $sinhvienId)
                          ->where('dethi_id', $dethiId)
                          ->first();
 
-        // Nếu không tìm thấy kết quả, trả về thông báo lỗi 404
         if (!$ketQua) {
             return response()->json(['message' => 'Không tìm thấy kết quả.'], 404);
         }
 
-        // Nếu tìm thấy kết quả, trả về dữ liệu kết quả dưới dạng JSON với mã trạng thái 200
         return response()->json($ketQua, 200);
     }
 
-    // Views
-
-    // Hiển thị kết quả của sinh viên cho một đề thi qua giao diện
-    public function view($sinhvienId, $dethiId)
+    // Thêm kết quả qua API
+    public function store(Request $request)
     {
-        // Tìm kết quả của sinh viên với ID và đề thi được chỉ định
-        $ketQua = KetQua::where('sinhvien_id', $sinhvienId)
-                         ->where('dethi_id', $dethiId)
-                         ->first();
+        // Lấy sinh viên từ token đăng nhập (Sanctum)
+        $sinhVien = Auth::guard('sanctum')->user();
 
-        // Nếu không tìm thấy kết quả, trả về view thông báo không tìm thấy kết quả
-        if (!$ketQua) {
-            return view('ketqua.notfound');
+        if (!$sinhVien) {
+            return response()->json(['message' => 'Không tìm thấy sinh viên đã đăng nhập.'], 401);
         }
 
-        // Nếu tìm thấy kết quả, trả về view hiển thị kết quả với dữ liệu kết quả
-        return view('ketqua.show', compact('ketQua'));
+        // Xác thực dữ liệu đầu vào từ request
+        $request->validate([
+            'diemSo' => 'required|numeric|min:0|max:10',  // Kiểm tra điểm số là số và nằm trong khoảng 0-10
+            'danhSachDapAn' => 'required|json',            // Đáp án phải là JSON hợp lệ
+            'dethi_id' => 'required|exists:tb_dethi,id',   // Đề thi phải tồn tại
+        ]);
+
+        // Tạo mới kết quả và lưu vào cơ sở dữ liệu
+        $ketQua = KetQua::create([
+            'diemSo' => $request->diemSo,
+            'danhSachDapAn' => $request->danhSachDapAn,
+            'dethi_id' => $request->dethi_id,
+            'sinhvien_id' => $sinhVien->id, // Chèn sinhvien_id từ sinh viên đã đăng nhập
+        ]);
+
+        // Trả về kết quả vừa được thêm với mã trạng thái 201
+        return response()->json(['message' => 'Kết quả đã được lưu thành công.', 'ketQua' => $ketQua], 201);
     }
 }

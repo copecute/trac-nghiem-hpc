@@ -145,11 +145,9 @@ class DeThiController extends Controller
     // API JSON: Lấy danh sách các đề thi theo ID ca thi
     public function apiIndex(Request $request)
     {
-        $caThiId = $request->get('cathi_id'); // Lấy ID ca thi từ request
 
         // Lấy tất cả các đề thi với thông tin môn học và ca thi liên quan
-        $query = DeThi::with('monHoc', 'caThi')
-            ->where('cathi_id', $caThiId); // Lọc theo ID ca thi
+        $query = DeThi::with('monHoc', 'caThi');
 
         $deThis = $query->get(); // Thực hiện truy vấn và lấy dữ liệu
         // Trả về dữ liệu dưới dạng JSON với mã trạng thái 200
