@@ -26,6 +26,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SinhVien;
+use App\Models\Lop;
+use App\Models\Nganh;
+use App\Models\Khoa;
 use Illuminate\Support\Facades\Hash;
 
 class SinhVienAuthController extends Controller
@@ -48,13 +51,26 @@ class SinhVienAuthController extends Controller
             return response()->json(['message' => 'Tài khoản hoặc mật khẩu không hợp lệ'], 401);
         }
     
-        // tạo token
+        // Lấy thông tin chi tiết lớp, ngành, khoa của sinh viên
+        $lop = Lop::find($sinhVien->lop_id);
+        $nganh = Nganh::find($lop->nganh_id);
+        $khoa = Khoa::find($nganh->khoa_id);
+    
+        // Tạo token
         $token = $sinhVien->createToken('copecute!~', [], now()->addHours(5))->plainTextToken;
     
-        // trả về thông báo thành công cùng với token
+        // Trả về thông báo thành công cùng với token và thông tin chi tiết
         return response()->json([
             'message' => 'Đăng nhập thành công',
+            'maSV' => $sinhVien->maSV,
+            'hoTen' => $sinhVien->hoTen,
+            'maLop' => $lop->maLop,
+            'tenLop' => $lop->tenLop,
+            'maNganh' => $nganh->maNganh,
+            'tenNganh' => $nganh->tenNganh,
+            'maKhoa' => $khoa->maKhoa,
+            'tenKhoa' => $khoa->tenKhoa,
             'token' => $token,
         ]);
     }
-}    
+}
