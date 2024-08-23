@@ -1,7 +1,8 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CheckPermission;
+
 use App\Http\Middleware\ApiAuthenticate;
+
 use App\Http\Controllers\KhoaController;
 use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
@@ -48,17 +49,6 @@ Route::middleware([ApiAuthenticate::class])->group(function () {
         Route::get('?search', [KhoaController::class, 'apiSearch']);
     });
 });
-
-// đăng nhập mới đc truy cập
-//Route::middleware('auth')->group(function () {
-    // có quyền admin mới được truy cập
-  //  Route::middleware([CheckPermission::class . ':admin'])->group(function () {
-    //});
-    // có quyền user là được truy cập
-    //Route::middleware([CheckPermission::class . ':user'])->group(function () {
-    //});
-//});
-
 
 // Nghành
 Route::get('/nganh', [NganhController::class, 'apiIndex']);

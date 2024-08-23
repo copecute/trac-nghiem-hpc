@@ -33,28 +33,25 @@
                         <li><a class="dropdown-item" href="{{ route('nganh.create') }}">Thêm Ngành</a></li>
                     </ul>
                 </li>
-                <!-- Thêm các menu khác tại đây -->
             </ul>
             <ul class="navbar-nav">
                 @auth
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
+                            <i class="bi bi-person-circle"></i> {{ Auth::user()->taiKhoan }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Quyền: {{ Auth::user()->phanQuyenHienThi }}</a></li>
+                            <li><a class="dropdown-item" href="{{ route('logout') }}">Đăng xuất</a></li>
                         </ul>
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
-                    </li>
+                        <a class="nav-link" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}"><i class="bi bi-person-plus-fill"></i> Register</a>
-                    </li>
+                        <a class="nav-link" href="{{ route('register') }}"><i class="bi bi-person-plus-fill"></i> Register</a></li>
                 @endauth
-            </ul>
+            </ul>            
         </div>
     </div>
 </nav>

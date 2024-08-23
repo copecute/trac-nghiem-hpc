@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();                              // Tự động tăng id
             $table->string('taiKhoan')->unique();
             $table->string('matKhau');
-            $table->boolean('phanQuyen')->default(false);
+            $table->tinyInteger('phanQuyen')->default(0); // đã thử boolean không hoạt động tốt
             $table->timestamps();
         });
     }
