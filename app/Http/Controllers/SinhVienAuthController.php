@@ -35,26 +35,26 @@ class SinhVienAuthController extends Controller
     {
         // Xác thực dữ liệu đầu vào từ request
         $request->validate([
-            'maSV' => 'required|string|max:10|exists:tb_SinhVien,maSV', // 'maSV' là bắt buộc, phải là chuỗi, tối đa 10 ký tự và phải tồn tại trong bảng 'tb_SinhVien'
+            'maSV' => 'required|string|max:255', // 'maSV' là bắt buộc, phải là chuỗi, tối đa 255 ký tự
             'matKhau' => 'required', // 'matKhau' là bắt buộc
         ]);
     
         // Tìm sinh viên theo mã sinh viên
         $sinhVien = SinhVien::where('maSV', $request->maSV)->first();
     
-        // Kiểm tra xem sinh viên có tồn tại và mật khẩu có đúng không
+        // Kiểm tra xem sinh viên có tồn tại
         if (!$sinhVien || !Hash::check($request->matKhau, $sinhVien->matKhau)) {
-            // Nếu thông tin không hợp lệ, trả về thông báo lỗi với mã trạng thái 401 (Unauthorized)
-            return response()->json(['message' => 'Thông tin đăng nhập không hợp lệ'], 401);
+            // nếu không tìm thấy maSV hoặc mk không chính xác, trả về thông báo lỗi chung
+            return response()->json(['message' => 'Tài khoản hoặc mật khẩu không hợp lệ'], 401);
         }
     
-        // Tạo token cho sinh viên và trả về
-        $token = $sinhVien->createToken('copecuteHPC')->plainTextToken;
+        // tạo token
+        $token = $sinhVien->createToken('copecute!~', [], now()->addHours(5))->plainTextToken;
     
-        // Trả về thông báo thành công cùng với token
+        // trả về thông báo thành công cùng với token
         return response()->json([
             'message' => 'Đăng nhập thành công',
             'token' => $token,
         ]);
     }
-}
+}    
