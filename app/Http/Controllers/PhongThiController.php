@@ -142,18 +142,39 @@ class PhongThiController extends Controller
     {
         // Khởi tạo query builder để truy vấn bảng PhongThi
         $query = PhongThi::query();
-
-        // Nếu có 'cathi_id', thêm điều kiện vào query để lọc theo 'cathi_id'
-        if ($request->has('cathi_id')) {
-            $query->where('cathi_id', $request->input('cathi_id'));
+    
+        // Kiểm tra nếu có tham số 'kythi_id'
+        if ($request->has('kythi')) {
+            $kythi_id = $request->input('kythi');
+            $query->whereHas('caThi', function ($q) use ($kythi_id) {
+                $q->where('kythi_id', $kythi_id);
+            });
         }
-
+    
+        // Kiểm tra nếu có tham số 'cathi_id'
+        if ($request->has('cathi')) {
+            $cathi_id = $request->input('cathi');
+            $query->where('cathi_id', $cathi_id);
+        }
+    
+        // Kiểm tra nếu có tham số 'search'
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('tenPhongThi', 'LIKE', "%$search%");
+        }
+    
         // Thực hiện truy vấn và lấy danh sách phòng thi
         $phongThis = $query->get();
         
+                // nếu không có kết quả
+        if ($phongThis->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+
         // Trả về dữ liệu phòng thi dưới dạng JSON với mã trạng thái 200
         return response()->json($phongThis, 200);
     }
+    
 
     // Phương thức lấy thông tin phòng thi theo ID dưới dạng JSON
     public function apiShow($id)

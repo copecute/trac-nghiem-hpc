@@ -96,9 +96,47 @@ class CaThiController extends Controller
     }
 
     // API JSON: Lấy danh sách các Ca thi dựa trên kythi_id
-    public function apiIndex($kythi_id) {
-        return response()->json(CaThi::where('kythi_id', $kythi_id)->get(), 200); // Trả về JSON danh sách các ca thi
+    public function apiIndex(Request $request, $kythi_id)
+    {
+        // Khởi tạo query để chọn các trường 'thoiGianBatDau' và 'thoiGianKetThuc'
+        $query = CaThi::select('id', 'tenCa', 'thoiGianBatDau', 'thoiGianKetThuc', 'kythi_id', 'monhoc_id')
+                       ->where('kythi_id', $kythi_id);
+    
+        // Kiểm tra nếu có tham số 'monhoc'
+        if ($request->has('monhoc')) {
+            $monhoc_id = $request->input('monhoc');
+            $query->where('monhoc_id', $monhoc_id);
+        }
+    
+        // kiểm tra nếu có tham số 'search'
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('tenCa', 'LIKE', "%$search%");
+        }
+    
+        // kiểm tra nếu có tham số 'all'
+        if ($request->has('all')) {
+            // nếu có tham số 'all', lấy tất cả các ca thi mà không có điều kiện thời gian
+            $caThis = $query->get();
+        } else {
+            // nếu không có tham số 'all', chỉ lấy các ca thi trong thời gian hiện tại
+            $now = now();
+            $query->where(function ($query) use ($now) {
+                $query->whereDate('thoiGianBatDau', '<=', $now)
+                      ->whereDate('thoiGianKetThuc', '>=', $now);
+            });
+            $caThis = $query->get();
+        }
+    
+        // nếu không có kết quả
+        if ($caThis->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+
+        // Trả về dữ liệu ca thi dưới dạng JSON với mã trạng thái 200
+        return response()->json($caThis, 200);
     }
+    
 
     // API JSON: Lưu Ca thi mới
     public function apiStore(Request $request, $kythi_id) {

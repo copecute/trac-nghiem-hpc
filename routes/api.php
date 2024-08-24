@@ -26,7 +26,7 @@ Route::get('/', function () {
 Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
 
 // xác thực bằng middleware auth:sanctum
-Route::middleware([ApiAuthenticate::class])->group(function () {
+// Route::middleware([ApiAuthenticate::class])->group(function () {
     // Sinh viên
     Route::prefix('sinhvien')->group(function () {
         Route::get('/', [SinhVienController::class, 'apiIndex']); // danh sách sinh viên
@@ -55,6 +55,7 @@ Route::middleware([ApiAuthenticate::class])->group(function () {
     Route::prefix('nganh')->group(function () {
         Route::get('/', [NganhController::class, 'apiIndex']); // danh sách ngành
         Route::get('/{id}', [NganhController::class, 'apiShow']); // chi tiết ngành theo ID
+        Route::get('?khoa', [NganhController::class, 'apiIndexByKhoa']); // Lấy ngành học theo khoa
         // Route::post('/', [NganhController::class, 'apiStore']); // thêm ngành
         // Route::put('/{id}', [NganhController::class, 'apiUpdate']); // sửa ngành
         // Route::delete('/{id}', [NganhController::class, 'apiDestroy']); // xoá ngành
@@ -134,4 +135,4 @@ Route::middleware([ApiAuthenticate::class])->group(function () {
         // Route::delete('/{id}', [PhongThiController::class, 'apiDestroy']); // xoá phần thi
     });
 
-});
+// });

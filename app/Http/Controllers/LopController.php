@@ -152,17 +152,28 @@ class LopController extends Controller
     {
         // Khởi tạo query để chọn các trường 'id', 'maLop', 'tenLop', và 'nganh_id' cùng với thông tin ngành
         $query = Lop::with('nganh')->select('id', 'maLop', 'tenLop', 'nganh_id');
-
+    
         // Nếu có từ khóa tìm kiếm, thêm điều kiện vào query để tìm kiếm theo mã lớp hoặc tên lớp
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('maLop', 'LIKE', "%$search%")
-                ->orWhere('tenLop', 'LIKE', "%$search%");
+                  ->orWhere('tenLop', 'LIKE', "%$search%");
         }
-
-        // Thực hiện truy vấn và lấy kết quả
+    
+        // Nếu có tham số 'nganh', lọc kết quả theo 'nganh_id'
+        if ($request->has('nganh')) {
+            $nganh_id = $request->input('nganh');
+            $query->where('nganh_id', $nganh_id);
+        }
+    
+        // truy vấn và lấy kết quả
         $lops = $query->get();
         
+        // nếu không có kết quả
+        if ($lops->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+
         // Trả về dữ liệu lớp học dưới dạng JSON với mã trạng thái 200
         return response()->json($lops, 200);
     }
