@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_KyThi', function (Blueprint $table) {
             $table->id();                                // Tự động tăng id
-            $table->string('tenKyThi')->nullable();      // Tên kỳ thi
+            $table->string('tenKyThi');                  // Tên kỳ thi
             $table->date('ngayBatDau')->nullable();      // Ngày bắt đầu
             $table->date('ngayKetThuc')->nullable();     // Ngày kết thúc
             $table->timestamps();
