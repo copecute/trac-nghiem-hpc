@@ -3,7 +3,8 @@
 @section('title', 'Danh sách Câu Hỏi')
 
 @section('content')
-    <h1>Danh sách Câu Hỏi</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh sách Câu Hỏi</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -17,14 +18,18 @@
         </div>
     @endif
 
-    <a href="{{ route('cauhoi.create') }}">Thêm Câu Hỏi</a>
+    <div class="mb-3">
+        <a href="{{ route('cauhoi.create') }}" class="btn btn-primary">Thêm Câu Hỏi</a>
+    </div>
 
-    <form action="{{ route('cauhoi.search') }}" method="GET">
-        <input type="text" name="search" placeholder="Tìm kiếm...">
-        <button type="submit">Tìm kiếm</button>
+    <form action="{{ route('cauhoi.search') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm...">
+            <button type="submit" class="btn btn-outline-secondary">Tìm kiếm</button>
+        </div>
     </form>
 
-    <table border="1">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -48,16 +53,17 @@
                     <td>{{ $cauHoi->doKho }}</td>
                     <td>{{ $cauHoi->monhoc->tenMonHoc }}</td>
                     <td>
-                            <a href="{{ route('dapan.index', $cauHoi->id) }}">Xem Đáp Án</a>
-                        <a href="{{ route('cauhoi.edit', $cauHoi->id) }}">Sửa</a>
-                        <form action="{{ route('cauhoi.destroy', $cauHoi->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline-block;">
+                        <a href="{{ route('dapan.index', $cauHoi->id) }}" class="btn btn-info btn-sm">Xem Đáp Án</a>
+                        <a href="{{ route('cauhoi.edit', $cauHoi->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+                        <form action="{{ route('cauhoi.destroy', $cauHoi->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xóa</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection
