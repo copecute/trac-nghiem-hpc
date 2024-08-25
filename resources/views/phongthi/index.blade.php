@@ -3,28 +3,37 @@
 @section('title', 'Danh Sách Phòng Thi')
 
 @section('content')
-    <h1>Danh Sách Phòng Thi</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh Sách Phòng Thi</h1>
 
     @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @elseif (session('error'))
-        <p style="color: red;">{{ session('error') }}</p>
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
 
-    <form action="{{ route('phongthi.index') }}" method="GET">
-        <label for="cathi_id">Chọn Ca Thi:</label>
-        <select name="cathi_id" id="cathi_id">
-            <option value="">--Chọn Ca Thi--</option>
-            @foreach($caThis as $caThi)
-                <option value="{{ $caThi->id }}" {{ $cathiId == $caThi->id ? 'selected' : '' }}>{{ $caThi->tenCa }}</option>
-            @endforeach
-        </select>
-        <button type="submit">Lọc</button>
+    <form action="{{ route('phongthi.index') }}" method="GET" class="mb-4">
+        <div class="mb-3">
+            <label for="cathi_id" class="form-label">Chọn Ca Thi:</label>
+            <select name="cathi_id" id="cathi_id" class="form-select">
+                <option value="">--Chọn Ca Thi--</option>
+                @foreach($caThis as $caThi)
+                    <option value="{{ $caThi->id }}" {{ $cathiId == $caThi->id ? 'selected' : '' }}>
+                        {{ $caThi->tenCa }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Lọc</button>
     </form>
 
-    <a href="{{ route('phongthi.create') }}">Thêm Phòng Thi</a>
+    <a href="{{ route('phongthi.create') }}" class="btn btn-success mb-3">Thêm Phòng Thi</a>
 
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -42,15 +51,16 @@
                     <td>{{ json_encode($phongThi->danhSachSinhVien) }}</td>
                     <td>{{ $phongThi->caThi->tenCa }}</td>
                     <td>
-                        <a href="{{ route('phongthi.edit', $phongThi->id) }}">Sửa</a>
-                        <form action="{{ route('phongthi.destroy', $phongThi->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline-block;">
+                        <a href="{{ route('phongthi.edit', $phongThi->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+                        <form action="{{ route('phongthi.destroy', $phongThi->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xóa</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection

@@ -1,9 +1,7 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
         <a class="navbar-brand" href="{{ url('/dashboard') }}">
-            <i class="bi bi-grid-1x2-fill"></i> HPC
+            <i class="bi bi-grid-1x2"></i> Trắc Nghiệm HPC
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -12,7 +10,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{ url('/dashboard') }}">
-                        <i class="bi bi-house-door-fill"></i> Home
+                        <i class="bi bi-house-door"></i> Home
                     </a>
                 </li>
                 <li class="nav-item dropdown">
@@ -26,7 +24,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="nganhDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-briefcase-fill"></i> Ngành
+                        <i class="bi bi-briefcase"></i> Ngành
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="nganhDropdown">
                         <li><a class="dropdown-item" href="{{ route('nganh.index') }}">Danh sách Ngành</a></li>
@@ -34,7 +32,7 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ms-auto">
                 @auth
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,12 +45,13 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                        <a class="nav-link" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}"><i class="bi bi-person-plus-fill"></i> Register</a></li>
+                        <a class="nav-link" href="{{ route('register') }}"><i class="bi bi-person-plus"></i> Register</a>
+                    </li>
                 @endauth
-            </ul>            
+            </ul>
         </div>
     </div>
 </nav>
-<div class="container mt-4">

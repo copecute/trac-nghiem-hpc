@@ -3,22 +3,33 @@
 @section('title', 'Danh Sách Ngành')
 
 @section('content')
-    <h1>Danh Sách Ngành</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh Sách Ngành</h1>
 
+    <!-- Hiển thị thông báo nếu có -->
     @if(session('success'))
-        <p style="color:green;">{{ session('success') }}</p>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @elseif(session('error'))
-        <p style="color:red;">{{ session('error') }}</p>
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
 
-    <form action="{{ route('nganh.search') }}" method="GET">
-        <input type="text" name="search" placeholder="Tìm kiếm">
-        <button type="submit">Tìm kiếm</button>
+    <!-- Form tìm kiếm -->
+    <form action="{{ route('nganh.search') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </div>
     </form>
 
-    <a href="{{ route('nganh.create') }}">Thêm Ngành Mới</a>
+    <!-- Nút thêm mới -->
+    <a href="{{ route('nganh.create') }}" class="btn btn-success mb-3">Thêm Ngành Mới</a>
 
-    <table border="1">
+    <!-- Bảng danh sách -->
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -36,15 +47,16 @@
                     <td>{{ $nganh->tenNganh }}</td>
                     <td>{{ $nganh->khoa->tenKhoa }}</td>
                     <td>
-                        <a href="{{ route('nganh.edit', $nganh->id) }}">Sửa</a>
+                        <a href="{{ route('nganh.edit', $nganh->id) }}" class="btn btn-warning btn-sm">Sửa</a>
                         <form action="{{ route('nganh.destroy', $nganh->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xóa</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">Xóa</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection

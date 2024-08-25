@@ -3,28 +3,35 @@
 @section('title', 'Danh Sách Đề Thi')
 
 @section('content')
-    <h1>Danh Sách Đề Thi</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh Sách Đề Thi</h1>
 
     @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @elseif (session('error'))
-        <p style="color: red;">{{ session('error') }}</p>
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
 
-    <form action="{{ route('dethi.index') }}" method="GET">
-        <label for="cathi_id">Chọn Ca Thi:</label>
-        <select name="cathi_id" id="cathi_id">
-            <option value="">--Chọn Ca Thi--</option>
-            @foreach($caThis as $caThi)
+    <form action="{{ route('dethi.index') }}" method="GET" class="mb-4">
+        <div class="mb-3">
+            <label for="cathi_id" class="form-label">Chọn Ca Thi:</label>
+            <select name="cathi_id" id="cathi_id" class="form-select">
+                <option value="">--Chọn Ca Thi--</option>
+                @foreach($caThis as $caThi)
                 <option value="{{ $caThi->id }}" {{ $caThiId == $caThi->id ? 'selected' : '' }}>{{ $caThi->tenCa }}</option>
             @endforeach
-        </select>
-        <button type="submit">Lọc</button>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Lọc</button>
     </form>
 
-    <a href="{{ route('dethi.create') }}">Thêm Đề Thi</a>
+    <a href="{{ route('dethi.create') }}" class="btn btn-success mb-3">Thêm Đề Thi</a>
 
-    <table>
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -52,15 +59,16 @@
                     <td>{{ $deThi->monHoc->tenMonHoc }}</td>
                     <td>{{ $deThi->caThi->tenCa }}</td>
                     <td>
-                        <a href="{{ route('dethi.edit', $deThi->id) }}">Sửa</a>
+                        <a href="{{ route('dethi.edit', $deThi->id) }}" class="btn btn-warning btn-sm">Sửa</a>
                         <form action="{{ route('dethi.destroy', $deThi->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xóa</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection
