@@ -3,7 +3,8 @@
 @section('title', 'Danh sách Đáp Án')
 
 @section('content')
-    <h1>Danh sách Đáp Án của Câu Hỏi: {{ $cauHoi->noiDung }}</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh sách Đáp Án của Câu Hỏi: <strong>{{ $cauHoi->noiDung }}</strong></h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -17,9 +18,9 @@
         </div>
     @endif
 
-    <a href="{{ route('dapan.create', $cauHoi->id) }}">Thêm Đáp Án</a>
+    <a href="{{ route('dapan.create', $cauHoi->id) }}" class="btn btn-primary mb-3">Thêm Đáp Án</a>
 
-    <table border="1">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -39,15 +40,16 @@
                     <td>{{ $dapAn->typeImage }}</td>
                     <td>{{ $dapAn->dapAnDung ? 'Đúng' : 'Sai' }}</td>
                     <td>
-                        <a href="{{ route('dapan.edit', [$cauHoi->id, $dapAn->id]) }}">Sửa</a>
-                        <form action="{{ route('dapan.destroy', [$cauHoi->id, $dapAn->id]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline-block;">
+                        <a href="{{ route('dapan.edit', [$cauHoi->id, $dapAn->id]) }}" class="btn btn-warning btn-sm">Sửa</a>
+                        <form action="{{ route('dapan.destroy', [$cauHoi->id, $dapAn->id]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xóa</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection

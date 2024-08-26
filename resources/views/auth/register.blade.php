@@ -3,30 +3,44 @@
 @section('title', 'Đăng ký')
 
 @section('content')
-    <h1>Register</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Register</h2>
+                </div>
+                <div class="card-body">
 
-    @if (session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <p>{{ $error }}</p>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="taiKhoan">Tài khoản:</label>
+                            <input type="text" class="form-control" name="taiKhoan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="matKhau">Mật khẩu:</label>
+                            <input type="password" class="form-control" name="matKhau" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    @endif
-
-    @if ($errors->any())
-        <div style="color: red;">
-            @foreach ($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-        <label for="taiKhoan">Tài khoản:</label>
-        <input type="text" name="taiKhoan" required>
-        <br>
-        <label for="matKhau">Mật khẩu:</label>
-        <input type="password" name="matKhau" required>
-        <br>
-        <button type="submit">Register</button>
-    </form>
+    </div>
+</div>
 @endsection

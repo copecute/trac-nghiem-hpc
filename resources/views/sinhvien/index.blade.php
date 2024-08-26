@@ -1,10 +1,10 @@
-<!-- resources/views/sinhvien/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Danh sách Sinh Viên')
 
 @section('content')
-    <h1>Danh sách Sinh Viên</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh sách Sinh Viên</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -18,14 +18,16 @@
         </div>
     @endif
 
-    <form action="{{ route('sinhvien.search') }}" method="GET">
-        <input type="text" name="search" placeholder="Tìm kiếm...">
-        <button type="submit">Tìm kiếm</button>
+    <form action="{{ route('sinhvien.search') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..." value="{{ request()->get('search') }}">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </div>
     </form>
 
-    <a href="{{ route('sinhvien.create') }}">Thêm Mới</a>
-    
-    <table border="1">
+    <a href="{{ route('sinhvien.create') }}" class="btn btn-success mb-3">Thêm Mới</a>
+
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -53,15 +55,16 @@
                     <td>{{ $sinhVien->email }}</td>
                     <td>{{ $sinhVien->lop->tenLop }}</td>
                     <td>
-                        <a href="{{ route('sinhvien.edit', $sinhVien->id) }}">Sửa</a>
-                        <form action="{{ route('sinhvien.destroy', $sinhVien->id) }}" method="POST" style="display:inline-block;">
+                        <a href="{{ route('sinhvien.edit', $sinhVien->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+                        <form action="{{ route('sinhvien.destroy', $sinhVien->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xóa</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection
