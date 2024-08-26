@@ -57,7 +57,7 @@ class KetQuaController extends Controller
         // Xác thực dữ liệu đầu vào từ request
         $request->validate([
             'diemSo' => 'required|numeric|min:0|max:10',  // Kiểm tra điểm số là số và nằm trong khoảng 0-10
-            'danhSachDapAn' => 'required|json',            // Đáp án phải là JSON hợp lệ
+            'danhSachDapAn' => 'json',            // Đáp án phải là JSON hợp lệ
             'dethi_id' => 'required|exists:tb_dethi,id',   // Đề thi phải tồn tại
         ]);
 

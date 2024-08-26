@@ -26,7 +26,7 @@ Route::get('/', function () {
 Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
 
 // xác thực bằng middleware auth:sanctum
-// Route::middleware([ApiAuthenticate::class])->group(function () {
+Route::middleware([ApiAuthenticate::class])->group(function () {
     // Sinh viên
     Route::prefix('sinhvien')->group(function () {
         Route::get('/', [SinhVienController::class, 'apiIndex']); // danh sách sinh viên
@@ -135,4 +135,4 @@ Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
         // Route::delete('/{id}', [PhongThiController::class, 'apiDestroy']); // xoá phần thi
     });
 
-// });
+});

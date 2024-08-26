@@ -98,9 +98,12 @@ class CaThiController extends Controller
     // API JSON: Lấy danh sách các Ca thi dựa trên kythi_id
     public function apiIndex(Request $request, $kythi_id)
     {
-        // Khởi tạo query để chọn các trường 'thoiGianBatDau' và 'thoiGianKetThuc'
+        // Khởi tạo query để chọn các trường 'id', 'tenCa', 'thoiGianBatDau', 'thoiGianKetThuc', 'kythi_id', 'monhoc_id' và load các phòng thi
         $query = CaThi::select('id', 'tenCa', 'thoiGianBatDau', 'thoiGianKetThuc', 'kythi_id', 'monhoc_id')
-                       ->where('kythi_id', $kythi_id);
+                      ->where('kythi_id', $kythi_id)
+                      ->with(['phongThis' => function ($query) {
+                          $query->select('id', 'tenPhongThi', 'cathi_id');
+                      }]);
     
         // Kiểm tra nếu có tham số 'monhoc'
         if ($request->has('monhoc')) {
@@ -132,10 +135,10 @@ class CaThiController extends Controller
         if ($caThis->isEmpty()) {
             return response()->json(['message' => 'No results found'], 404);
         }
-
-        // Trả về dữ liệu ca thi dưới dạng JSON với mã trạng thái 200
+    
+        // Trả về dữ liệu ca thi cùng với phòng thi dưới dạng JSON với mã trạng thái 200
         return response()->json($caThis, 200);
-    }
+    }    
     
 
     // API JSON: Lưu Ca thi mới
