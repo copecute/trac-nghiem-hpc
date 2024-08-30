@@ -37,7 +37,9 @@
 
         <div class="mb-3">
             <label for="cauHoi" class="form-label">Câu Hỏi (JSON):</label>
-            <textarea name="cauHoi" id="cauHoi" class="form-control" rows="4" required>{{ $deThi->cauHoi }}</textarea>
+            <textarea name="cauHoi" id="cauHoi" class="form-control" rows="4" required>
+                {{ json_encode($deThi->cauHoi, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+            </textarea>
         </div>
 
         <div class="mb-3">

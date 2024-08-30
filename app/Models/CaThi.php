@@ -25,6 +25,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class CaThi extends Model
 {
@@ -37,6 +38,8 @@ class CaThi extends Model
     protected $fillable = [
         'tenCa', 'thoiGianBatDau', 'thoiGianKetThuc', 'kythi_id', 'monhoc_id',
     ];
+
+    protected $dates = ['thoiGianBatDau', 'thoiGianKetThuc'];
 
     // Các thuộc tính sẽ bị ẩn khi chuyển đổi thành mảng hoặc JSON
     protected $hidden = ['created_at', 'updated_at'];
