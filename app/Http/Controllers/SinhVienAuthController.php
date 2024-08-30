@@ -26,6 +26,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SinhVien;
+use App\Models\Lop;
+use App\Models\Nganh;
+use App\Models\Khoa;
 use Illuminate\Support\Facades\Hash;
 
 class SinhVienAuthController extends Controller
@@ -35,25 +38,38 @@ class SinhVienAuthController extends Controller
     {
         // Xác thực dữ liệu đầu vào từ request
         $request->validate([
-            'maSV' => 'required|string|max:10|exists:tb_SinhVien,maSV', // 'maSV' là bắt buộc, phải là chuỗi, tối đa 10 ký tự và phải tồn tại trong bảng 'tb_SinhVien'
+            'maSV' => 'required|string|max:255', // 'maSV' là bắt buộc, phải là chuỗi, tối đa 255 ký tự
             'matKhau' => 'required', // 'matKhau' là bắt buộc
         ]);
     
         // Tìm sinh viên theo mã sinh viên
         $sinhVien = SinhVien::where('maSV', $request->maSV)->first();
     
-        // Kiểm tra xem sinh viên có tồn tại và mật khẩu có đúng không
+        // Kiểm tra xem sinh viên có tồn tại
         if (!$sinhVien || !Hash::check($request->matKhau, $sinhVien->matKhau)) {
-            // Nếu thông tin không hợp lệ, trả về thông báo lỗi với mã trạng thái 401 (Unauthorized)
-            return response()->json(['message' => 'Thông tin đăng nhập không hợp lệ'], 401);
+            // nếu không tìm thấy maSV hoặc mk không chính xác, trả về thông báo lỗi chung
+            return response()->json(['message' => 'Tài khoản hoặc mật khẩu không hợp lệ'], 401);
         }
     
-        // Tạo token cho sinh viên và trả về
-        $token = $sinhVien->createToken('copecuteHPC')->plainTextToken;
+        // Lấy thông tin chi tiết lớp, ngành, khoa của sinh viên
+        $lop = Lop::find($sinhVien->lop_id);
+        $nganh = Nganh::find($lop->nganh_id);
+        $khoa = Khoa::find($nganh->khoa_id);
     
-        // Trả về thông báo thành công cùng với token
+        // Tạo token
+        $token = $sinhVien->createToken('copecute!~', [], now()->addHours(5))->plainTextToken;
+    
+        // Trả về thông báo thành công cùng với token và thông tin chi tiết
         return response()->json([
             'message' => 'Đăng nhập thành công',
+            'maSV' => $sinhVien->maSV,
+            'hoTen' => $sinhVien->hoTen,
+            'maLop' => $lop->maLop,
+            'tenLop' => $lop->tenLop,
+            'maNganh' => $nganh->maNganh,
+            'tenNganh' => $nganh->tenNganh,
+            'maKhoa' => $khoa->maKhoa,
+            'tenKhoa' => $khoa->tenKhoa,
             'token' => $token,
         ]);
     }

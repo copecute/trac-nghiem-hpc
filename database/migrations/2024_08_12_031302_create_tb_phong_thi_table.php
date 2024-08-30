@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_PhongThi', function (Blueprint $table) {
             $table->id();                                  // Tự động tăng id
-            $table->string('tenPhongThi')->nullable();     // Tên phòng thi
+            $table->string('tenPhongThi');                 // Tên phòng thi
             $table->json('danhSachSinhVien')->nullable();  // Danh sách sinh viên
             $table->unsignedBigInteger('cathi_id');        // Khóa ngoại tham chiếu đến bảng ca thi
             $table->timestamps();

@@ -151,20 +151,32 @@ class NganhController extends Controller
     {
         // Khởi tạo query để chọn các trường 'id', 'maNganh', 'tenNganh', và 'khoa_id' cùng với thông tin khoa
         $query = Nganh::with('khoa')->select('id', 'maNganh', 'tenNganh', 'khoa_id');
-
+    
         // Nếu có từ khóa tìm kiếm, thêm điều kiện vào query để tìm kiếm theo mã ngành hoặc tên ngành
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('maNganh', 'LIKE', "%$search%")
                   ->orWhere('tenNganh', 'LIKE', "%$search%");
         }
-
-        // Thực hiện truy vấn và lấy kết quả
+    
+        // Nếu có tham số 'khoa', lọc kết quả theo 'khoa_id'
+        if ($request->has('khoa')) {
+            $khoa_id = $request->input('khoa');
+            $query->where('khoa_id', $khoa_id);
+        }
+    
+        // truy vấn và lấy kết quả
         $nganhs = $query->get();
-        
+
+        // nếu không có kết quả
+        if ($nganhs->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+
         // Trả về dữ liệu ngành học dưới dạng JSON với mã trạng thái 200
         return response()->json($nganhs, 200);
     }
+    
 
     // Lấy thông tin ngành học theo ID dưới dạng JSON
     public function apiShow($id)

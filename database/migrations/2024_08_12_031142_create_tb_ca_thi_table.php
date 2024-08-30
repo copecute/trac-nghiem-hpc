@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('tb_CaThi', function (Blueprint $table) {
             $table->id();                                // Tự động tăng id
-            $table->string('tenCa')->nullable();         // Tên ca thi
-            $table->dateTime('thoiGianBatDau')->nullable(); // Thời gian bắt đầu
-            $table->dateTime('thoiGianKetThuc')->nullable(); // Thời gian kết thúc
+            $table->string('tenCa');                     // Tên ca thi
+            $table->dateTime('thoiGianBatDau');          // Thời gian bắt đầu
+            $table->dateTime('thoiGianKetThuc');         // Thời gian kết thúc
             $table->unsignedBigInteger('kythi_id');      // Khóa ngoại tham chiếu đến bảng 'tb_kithi'
             $table->unsignedBigInteger('monhoc_id');     // Khóa ngoại tham chiếu đến bảng 'tb_monhoc'
             $table->timestamps();

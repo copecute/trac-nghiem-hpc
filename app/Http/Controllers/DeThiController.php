@@ -145,14 +145,43 @@ class DeThiController extends Controller
     // API JSON: Lấy danh sách các đề thi theo ID ca thi
     public function apiIndex(Request $request)
     {
-        $caThiId = $request->get('cathi_id'); // Lấy ID ca thi từ request
+        // Khởi tạo query để chọn các trường cần thiết và kèm theo thông tin môn học và ca thi liên quan
+        $query = DeThi::with('monHoc', 'caThi');
+        
+        // Kiểm tra nếu có tham số 'kythi_id'
+        if ($request->has('kythi')) {
+            $kythi_id = $request->input('kythi');
+            $query->whereHas('caThi', function ($q) use ($kythi_id) {
+                $q->where('kythi_id', $kythi_id);
+            });
+        }
+    
+        // Kiểm tra nếu có tham số 'cathi_id'
+        if ($request->has('cathi')) {
+            $cathi_id = $request->input('cathi');
+            $query->where('cathi_id', $cathi_id);
+        }
+    
+        // kiểm tra nếu có tham số 'monhoc_id'
+        if ($request->has('monhoc')) {
+            $monhoc_id = $request->input('monhoc');
+            $query->where('monhoc_id', $monhoc_id);
+        }
+    
+        // kiểm tra nếu có tham số 'search'
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('tenDe', 'LIKE', "%$search%");
+        }
+    
+        $deThis = $query->get();
 
-        // Lấy tất cả các đề thi với thông tin môn học và ca thi liên quan
-        $query = DeThi::with('monHoc', 'caThi')
-            ->where('cathi_id', $caThiId); // Lọc theo ID ca thi
-
-        $deThis = $query->get(); // Thực hiện truy vấn và lấy dữ liệu
-        // Trả về dữ liệu dưới dạng JSON với mã trạng thái 200
+        // nếu không có kết quả
+        if ($deThis->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+                
+        // trả về dữ liệu đề thi dưới dạng JSON với mã trạng thái 200
         return response()->json($deThis, 200);
     }
 

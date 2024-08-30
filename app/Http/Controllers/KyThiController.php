@@ -142,21 +142,41 @@ class KyThiController extends Controller
     // Lấy danh sách kỳ thi dưới dạng JSON với khả năng tìm kiếm
     public function apiIndex(Request $request)
     {
-        // Khởi tạo query để chọn các trường 'id', 'tenKyThi', 'ngayBatDau', và 'ngayKetThuc'
-        $query = KyThi::select('id', 'tenKyThi', 'ngayBatDau', 'ngayKetThuc');
-
-        // Nếu có từ khóa tìm kiếm, thêm điều kiện vào query
+        // Khởi tạo query để chọn các trường 'id', 'tenKyThi', 'ngayBatDau', và 'ngayKetThuc' và load các ca thi
+        $query = KyThi::select('id', 'tenKyThi', 'ngayBatDau', 'ngayKetThuc')
+            ->with(['caThis' => function ($query) {
+                $query->select('id', 'tenCa', 'thoiGianBatDau', 'thoiGianKetThuc', 'kythi_id');
+            }]);
+        
+        // Kiểm tra nếu có tham số 'search'
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('tenKyThi', 'LIKE', "%$search%");
         }
-
-        // Thực hiện truy vấn và lấy kết quả
-        $kyThis = $query->get();
         
-        // Trả về dữ liệu kỳ thi dưới dạng JSON với mã trạng thái 200
+        // Kiểm tra nếu có tham số 'all'
+        if ($request->has('all')) {
+            // Nếu tham số 'all' có mặt, lấy tất cả kỳ thi mà không có điều kiện thời gian
+            $kyThis = $query->get();
+        } else {
+            // Nếu không có tham số 'all', chỉ lấy kỳ thi trong thời gian hiện tại
+            $now = now();
+            $query->where(function ($query) use ($now) {
+                $query->whereDate('ngayBatDau', '<=', $now)
+                      ->whereDate('ngayKetThuc', '>=', $now);
+            });
+            $kyThis = $query->get();
+        }
+    
+        // nếu không có kết quả
+        if ($kyThis->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+    
+        // Trả về dữ liệu kỳ thi cùng với ca thi dưới dạng JSON với mã trạng thái 200
         return response()->json($kyThis, 200);
     }
+    
 
     // Lấy thông tin kỳ thi theo ID dưới dạng JSON
     public function apiShow($id)

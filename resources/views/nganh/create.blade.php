@@ -3,31 +3,44 @@
 @section('title', 'Thêm Ngành Mới')
 
 @section('content')
-    <h1>Thêm Ngành Mới</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Thêm Ngành Mới</h1>
 
+    <!-- Hiển thị thông báo nếu có -->
     @if(session('success'))
-        <p style="color:green;">{{ session('success') }}</p>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @elseif(session('error'))
-        <p style="color:red;">{{ session('error') }}</p>
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
 
     <form action="{{ route('nganh.store') }}" method="POST">
         @csrf
-        <label for="maNganh">Mã Ngành:</label>
-        <input type="text" name="maNganh" id="maNganh" required>
+        <div class="mb-3">
+            <label for="maNganh" class="form-label">Mã Ngành:</label>
+            <input type="text" name="maNganh" id="maNganh" class="form-control" required>
+        </div>
 
-        <label for="tenNganh">Tên Ngành:</label>
-        <input type="text" name="tenNganh" id="tenNganh" required>
+        <div class="mb-3">
+            <label for="tenNganh" class="form-label">Tên Ngành:</label>
+            <input type="text" name="tenNganh" id="tenNganh" class="form-control" required>
+        </div>
 
-        <label for="khoa_id">Khoa:</label>
-        <select name="khoa_id" id="khoa_id" required>
-            @foreach($khoas as $khoa)
-                <option value="{{ $khoa->id }}">{{ $khoa->tenKhoa }}</option>
-            @endforeach
-        </select>
+        <div class="mb-3">
+            <label for="khoa_id" class="form-label">Khoa:</label>
+            <select name="khoa_id" id="khoa_id" class="form-select" required>
+                @foreach($khoas as $khoa)
+                    <option value="{{ $khoa->id }}">{{ $khoa->tenKhoa }}</option>
+                @endforeach
+            </select>
+        </div>
 
-        <button type="submit">Thêm</button>
+        <button type="submit" class="btn btn-primary">Thêm</button>
     </form>
 
-    <a href="{{ route('nganh.index') }}">Quay lại</a>
+    <a href="{{ route('nganh.index') }}" class="btn btn-secondary mt-3">Quay lại</a>
+</div>
 @endsection

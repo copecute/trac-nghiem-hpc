@@ -33,9 +33,6 @@ class Admin extends Authenticatable
     // Đặt tên bảng tương ứng với mô hình này trong cơ sở dữ liệu
     protected $table = 'tb_Admin';
 
-    // Đặt khóa chính của bảng là 'taiKhoan'
-    protected $primaryKey = 'taiKhoan';
-
     // Các thuộc tính có thể được gán giá trị thông qua mass assignment
     protected $fillable = [
         'taiKhoan',
@@ -45,7 +42,7 @@ class Admin extends Authenticatable
 
     // Các thuộc tính sẽ bị ẩn khi chuyển đổi thành mảng hoặc JSON
     protected $hidden = [
-        'matKhau', 'created_at', 'updated_at'
+        'matKhau', 'created_at', 'updated_at',
     ];
 
     // Hàm này sẽ được gọi khi thuộc tính 'matKhau' được gán giá trị
@@ -53,5 +50,10 @@ class Admin extends Authenticatable
     {
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         $this->attributes['matKhau'] = bcrypt($value);
+    }
+
+    public function getPhanQuyenHienThiAttribute()
+    {
+        return $this->phanQuyen ? 'Admin' : 'Nhân viên';
     }
 }

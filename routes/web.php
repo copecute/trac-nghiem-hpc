@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+
 use App\Http\Middleware\CheckPermission;
+
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KhoaController;
 use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
@@ -19,11 +21,7 @@ use App\Http\Controllers\PhongThiController;
 
 Route::get('/', function () {
     return view('index');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-});
+})->name('index');;
 
 // admin login 
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -32,55 +30,73 @@ Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('r
 Route::post('register', [AuthController::class, 'register']);
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Khoa
-Route::get('/khoa', [KhoaController::class, 'index'])->name('khoa.index');
+//Route::middleware('auth')->group(function () {
+    // có quyền admin mới được truy cập
+  //  Route::middleware([CheckPermission::class . ':admin'])->group(function () {
+    //});
+    //Route::middleware([CheckPermission::class . ':user'])->group(function () {
+        //});
+        //});
+        
+
+Route::middleware('auth')->group(function () {
+    // Route yêu cầu người dùng có quyền là 'user'
+    Route::middleware([CheckPermission::class . ':user'])->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard.index'); // Đảm bảo bạn có view 'dashboard.index'
+        })->name('dashboard'); // Đặt tên route là 'dashboard'
+    });
+});
 
 // Login và có quyền admin
-// Route::middleware(['auth', CheckPermission::class . ':admin'])->group(function () {
+Route::middleware(['auth', CheckPermission::class . ':admin'])->group(function () {
+    
+    // Khoa
+    Route::get('/khoa', [KhoaController::class, 'index'])->name('khoa.index');
     Route::get('/khoa/create', [KhoaController::class, 'create'])->name('khoa.create');
     Route::get('/khoa/{id}/edit', [KhoaController::class, 'edit'])->name('khoa.edit');
     Route::post('/khoa', [KhoaController::class, 'store'])->name('khoa.store');
     Route::put('/khoa/{id}', [KhoaController::class, 'update'])->name('khoa.update');
     Route::delete('/khoa/{id}', [KhoaController::class, 'destroy'])->name('khoa.destroy');
-
     Route::get('/khoa/timkiem', [KhoaController::class, 'search'])->name('khoa.search');
-//});
-
-// Nghành
-Route::get('/nganh', [NganhController::class, 'index'])->name('nganh.index');
-Route::get('/nganh/search', [NganhController::class, 'search'])->name('nganh.search');
-Route::get('/nganh/create', [NganhController::class, 'create'])->name('nganh.create');
-Route::post('/nganh', [NganhController::class, 'store'])->name('nganh.store');
-Route::get('/nganh/{id}/edit', [NganhController::class, 'edit'])->name('nganh.edit');
-Route::put('/nganh/{id}', [NganhController::class, 'update'])->name('nganh.update');
-Route::delete('/nganh/{id}', [NganhController::class, 'destroy'])->name('nganh.destroy');
-
-// lớp
-Route::get('/lop', [LopController::class, 'index'])->name('lop.index');
-Route::get('/lop/timkiem', [LopController::class, 'search'])->name('lop.search');
-Route::get('/lop/create', [LopController::class, 'create'])->name('lop.create');
-Route::post('/lop', [LopController::class, 'store'])->name('lop.store');
-Route::get('/lop/{id}/edit', [LopController::class, 'edit'])->name('lop.edit');
-Route::put('/lop/{id}', [LopController::class, 'update'])->name('lop.update');
-Route::delete('/lop/{id}', [LopController::class, 'destroy'])->name('lop.destroy');
-
-// Sinh viên
-Route::get('/sinhvien', [SinhVienController::class, 'index'])->name('sinhvien.index');
-Route::get('/sinhvien/search', [SinhVienController::class, 'search'])->name('sinhvien.search');
-Route::get('/sinhvien/create', [SinhVienController::class, 'create'])->name('sinhvien.create');
-Route::post('/sinhvien', [SinhVienController::class, 'store'])->name('sinhvien.store');
-Route::get('/sinhvien/{id}/edit', [SinhVienController::class, 'edit'])->name('sinhvien.edit');
-Route::put('/sinhvien/{id}', [SinhVienController::class, 'update'])->name('sinhvien.update');
-Route::delete('/sinhvien/{id}', [SinhVienController::class, 'destroy'])->name('sinhvien.destroy');
-
-// Môn học
-Route::get('/monhoc', [MonHocController::class, 'index'])->name('monhoc.index');
-Route::get('/monhoc/search', [MonHocController::class, 'search'])->name('monhoc.search');
-Route::get('/monhoc/create', [MonHocController::class, 'create'])->name('monhoc.create');
-Route::post('/monhoc', [MonHocController::class, 'store'])->name('monhoc.store');
-Route::get('/monhoc/{id}/edit', [MonHocController::class, 'edit'])->name('monhoc.edit');
-Route::put('/monhoc/{id}', [MonHocController::class, 'update'])->name('monhoc.update');
-Route::delete('/monhoc/{id}', [MonHocController::class, 'destroy'])->name('monhoc.destroy');
+    
+    // Nghành
+    Route::get('/nganh', [NganhController::class, 'index'])->name('nganh.index');
+    Route::get('/nganh/search', [NganhController::class, 'search'])->name('nganh.search');
+    Route::get('/nganh/create', [NganhController::class, 'create'])->name('nganh.create');
+    Route::post('/nganh', [NganhController::class, 'store'])->name('nganh.store');
+    Route::get('/nganh/{id}/edit', [NganhController::class, 'edit'])->name('nganh.edit');
+    Route::put('/nganh/{id}', [NganhController::class, 'update'])->name('nganh.update');
+    Route::delete('/nganh/{id}', [NganhController::class, 'destroy'])->name('nganh.destroy');
+    
+    // lớp
+    Route::get('/lop', [LopController::class, 'index'])->name('lop.index');
+    Route::get('/lop/timkiem', [LopController::class, 'search'])->name('lop.search');
+    Route::get('/lop/create', [LopController::class, 'create'])->name('lop.create');
+    Route::post('/lop', [LopController::class, 'store'])->name('lop.store');
+    Route::get('/lop/{id}/edit', [LopController::class, 'edit'])->name('lop.edit');
+    Route::put('/lop/{id}', [LopController::class, 'update'])->name('lop.update');
+    Route::delete('/lop/{id}', [LopController::class, 'destroy'])->name('lop.destroy');
+    
+    // Sinh viên
+    Route::get('/sinhvien', [SinhVienController::class, 'index'])->name('sinhvien.index');
+    Route::get('/sinhvien/search', [SinhVienController::class, 'search'])->name('sinhvien.search');
+    Route::get('/sinhvien/create', [SinhVienController::class, 'create'])->name('sinhvien.create');
+    Route::post('/sinhvien', [SinhVienController::class, 'store'])->name('sinhvien.store');
+    Route::get('/sinhvien/{id}/edit', [SinhVienController::class, 'edit'])->name('sinhvien.edit');
+    Route::put('/sinhvien/{id}', [SinhVienController::class, 'update'])->name('sinhvien.update');
+    Route::delete('/sinhvien/{id}', [SinhVienController::class, 'destroy'])->name('sinhvien.destroy');
+    
+    // Môn học
+    Route::get('/monhoc', [MonHocController::class, 'index'])->name('monhoc.index');
+    Route::get('/monhoc/search', [MonHocController::class, 'search'])->name('monhoc.search');
+    Route::get('/monhoc/create', [MonHocController::class, 'create'])->name('monhoc.create');
+    Route::post('/monhoc', [MonHocController::class, 'store'])->name('monhoc.store');
+    Route::get('/monhoc/{id}/edit', [MonHocController::class, 'edit'])->name('monhoc.edit');
+    Route::put('/monhoc/{id}', [MonHocController::class, 'update'])->name('monhoc.update');
+    Route::delete('/monhoc/{id}', [MonHocController::class, 'destroy'])->name('monhoc.destroy');
+    
+});
 
 // câu hỏi
 Route::get('/cauhoi', [CauHoiController::class, 'index'])->name('cauhoi.index');

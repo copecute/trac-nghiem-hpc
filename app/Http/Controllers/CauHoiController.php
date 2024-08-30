@@ -154,8 +154,9 @@ class CauHoiController extends Controller
     public function apiIndex(Request $request)
     {
         // Tạo truy vấn để lấy danh sách câu hỏi
-        $query = CauHoi::select('id', 'noiDung', 'typeAudio', 'typeVideo', 'typeImage', 'doKho', 'monhoc_id');
-
+        $query = CauHoi::select('id', 'noiDung', 'typeAudio', 'typeVideo', 'typeImage', 'doKho', 'monhoc_id')
+                       ->with('monhoc'); // Eager load mối quan hệ với môn học
+    
         // Kiểm tra nếu có từ khóa tìm kiếm
         if ($request->has('search')) {
             $search = $request->input('search'); // Lấy từ khóa tìm kiếm từ request
@@ -164,9 +165,38 @@ class CauHoiController extends Controller
                       $query->where('tenMonHoc', 'LIKE', "%$search%");
                   });
         }
-
+    
+        // Nếu có tham số 'monhoc', lọc kết quả theo 'monhoc_id'
+        if ($request->filled('monhoc')) {
+            $monhoc_id = $request->input('monhoc');
+            $query->where('monhoc_id', $monhoc_id);
+        }
+    
+        // Nếu có tham số 'doKho', lọc kết quả theo 'doKho'
+        if ($request->filled('doKho')) {
+            $doKho = $request->input('doKho');
+            $query->where('doKho', $doKho);
+        }
+    
+        // Nếu có tham số 'limit', giới hạn số lượng câu hỏi trả về
+        if ($request->filled('limit')) {
+            $limit = (int) $request->input('limit');
+            $query->limit($limit);
+        }
+    
+        // Nếu có tham số 'random', sắp xếp ngẫu nhiên câu hỏi
+        if ($request->has('random')) {
+            $query->inRandomOrder();
+        }
+    
         // Thực hiện truy vấn và lấy kết quả
         $cauHois = $query->get();
+
+        // nếu không có kết quả
+        if ($cauHois->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+        
         // Trả về kết quả dưới dạng JSON với mã trạng thái 200
         return response()->json($cauHois, 200);
     }

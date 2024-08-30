@@ -183,9 +183,9 @@ class SinhVienController extends Controller
     // API JSON - Lấy danh sách sinh viên
     public function apiIndex(Request $request)
     {
-        // Tạo truy vấn để lấy danh sách sinh viên cùng với thông tin lớp
-        $query = SinhVien::with('lop');
-
+        // Tạo truy vấn để lấy danh sách sinh viên cùng với thông tin lớp, ngành, và khoa
+        $query = SinhVien::with('lop.nganh.khoa');
+    
         // Nếu có từ khóa tìm kiếm, áp dụng điều kiện tìm kiếm
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -193,10 +193,38 @@ class SinhVienController extends Controller
                   ->orWhere('hoTen', 'LIKE', "%$search%")
                   ->orWhere('email', 'LIKE', "%$search%");
         }
-
+    
+        // Nếu có tham số 'lop', lọc kết quả theo 'lop_id'
+        if ($request->filled('lop')) {
+            $lop_id = $request->input('lop');
+            $query->where('lop_id', $lop_id);
+        }
+    
+        // Nếu có tham số 'nganh', lọc kết quả theo 'nganh_id'
+        if ($request->filled('nganh')) {
+            $nganh_id = $request->input('nganh');
+            $query->whereHas('lop', function ($query) use ($nganh_id) {
+                $query->where('nganh_id', $nganh_id);
+            });
+        }
+    
+        // Nếu có tham số 'khoa', lọc kết quả theo 'khoa_id'
+        if ($request->filled('khoa')) {
+            $khoa_id = $request->input('khoa');
+            $query->whereHas('lop.nganh', function ($query) use ($khoa_id) {
+                $query->where('khoa_id', $khoa_id);
+            });
+        }
+    
         // Thực thi truy vấn và lấy kết quả
         $sinhViens = $query->get();
-        // Trả về dữ liệu sinhViens dưới dạng JSON với mã trạng thái 200 (OK)
+    
+        // Kiểm tra nếu không có kết quả
+        if ($sinhViens->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+    
+        // Trả về dữ liệu sinh viên dưới dạng JSON với mã trạng thái 200 (OK)
         return response()->json($sinhViens, 200);
     }
 
@@ -304,9 +332,9 @@ class SinhVienController extends Controller
     // API JSON - Tìm kiếm sinh viên
     public function apiSearch(Request $request)
     {
-        // Tạo truy vấn để lấy danh sách sinh viên cùng với thông tin lớp
-        $query = SinhVien::with('lop');
-
+        // Tạo truy vấn để lấy danh sách sinh viên cùng với thông tin lớp, ngành, và khoa
+        $query = SinhVien::with('lop.nganh.khoa');
+    
         // Nếu có từ khóa tìm kiếm, áp dụng điều kiện tìm kiếm
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -314,10 +342,38 @@ class SinhVienController extends Controller
                   ->orWhere('hoTen', 'LIKE', "%$search%")
                   ->orWhere('email', 'LIKE', "%$search%");
         }
-
+    
+        // Nếu có tham số 'lop', lọc kết quả theo 'lop_id'
+        if ($request->filled('lop')) {
+            $lop_id = $request->input('lop');
+            $query->where('lop_id', $lop_id);
+        }
+    
+        // Nếu có tham số 'nganh', lọc kết quả theo 'nganh_id'
+        if ($request->filled('nganh')) {
+            $nganh_id = $request->input('nganh');
+            $query->whereHas('lop', function ($query) use ($nganh_id) {
+                $query->where('nganh_id', $nganh_id);
+            });
+        }
+    
+        // Nếu có tham số 'khoa', lọc kết quả theo 'khoa_id'
+        if ($request->filled('khoa')) {
+            $khoa_id = $request->input('khoa');
+            $query->whereHas('lop.nganh', function ($query) use ($khoa_id) {
+                $query->where('khoa_id', $khoa_id);
+            });
+        }
+    
         // Thực thi truy vấn và lấy kết quả
         $sinhViens = $query->get();
-        // Trả về dữ liệu sinhViens dưới dạng JSON với mã trạng thái 200 (OK)
+    
+        // Kiểm tra nếu không có kết quả
+        if ($sinhViens->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+    
+        // Trả về dữ liệu sinh viên dưới dạng JSON với mã trạng thái 200 (OK)
         return response()->json($sinhViens, 200);
     }
 }

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_Admin', function (Blueprint $table) {            
-            $table->id();                              // Tự động tăng id
-            $table->string('taiKhoan')->unique();
-            $table->string('matKhau');
-            $table->boolean('phanQuyen')->default(false);
+            $table->id(); // tự động tăng id
+            $table->string('taiKhoan')->unique(); // tài khoản admin, duy nhất
+            $table->string('matKhau'); // mật khẩu đã được mã hóa
+            $table->tinyInteger('phanQuyen')->default(0); // 0=Nhân viên, 1=Admin
             $table->timestamps();
         });
     }

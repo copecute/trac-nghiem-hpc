@@ -37,4 +37,10 @@ class KyThi extends Model
     ]; // Các thuộc tính có thể được gán giá trị thông qua mass assignment
 
     protected $hidden = ['created_at', 'updated_at']; // Các thuộc tính sẽ bị ẩn khi chuyển đổi thành mảng hoặc JSON
+
+    // mối quan hệ với bảng CaThi
+    public function caThis()
+    {
+        return $this->hasMany(CaThi::class, 'kythi_id');
+    }
 }

@@ -50,7 +50,7 @@ class AuthController extends Controller
             // Đăng nhập admin
             Auth::login($admin);
             // Chuyển hướng tới trang danh sách Khoa với thông báo thành công
-            return redirect()->route('khoa.index')->with('success', 'Đăng nhập thành công');
+            return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
         }
 
         // Nếu thông tin đăng nhập không đúng, quay lại trang trước và hiển thị lỗi

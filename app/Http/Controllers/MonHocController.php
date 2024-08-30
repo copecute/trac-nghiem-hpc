@@ -150,17 +150,37 @@ class MonHocController extends Controller
     public function apiIndex(Request $request)
     {
         // Khởi tạo query để chọn các trường 'id', 'maMonHoc', 'tenMonHoc', và 'nganh_id'
-        $query = MonHoc::select('id', 'maMonHoc', 'tenMonHoc', 'nganh_id');
-
+        $query = MonHoc::select('id', 'maMonHoc', 'tenMonHoc', 'nganh_id')
+                       ->with('nganh.khoa'); // Eager load mối quan hệ nganh và khoa
+    
         // Nếu có từ khóa tìm kiếm, thêm điều kiện vào query để tìm kiếm theo mã môn học hoặc tên môn học
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('maMonHoc', 'LIKE', "%$search%")
                   ->orWhere('tenMonHoc', 'LIKE', "%$search%");
         }
-
+    
+        // Nếu có tham số 'nganh', lọc kết quả theo 'nganh_id'
+        if ($request->filled('nganh')) {
+            $nganh_id = $request->input('nganh');
+            $query->where('nganh_id', $nganh_id);
+        }
+    
+        // Nếu có tham số 'khoa', lọc kết quả theo 'khoa_id' thông qua mối quan hệ với ngành
+        if ($request->filled('khoa')) {
+            $khoa_id = $request->input('khoa');
+            $query->whereHas('nganh', function ($query) use ($khoa_id) {
+                $query->where('khoa_id', $khoa_id);
+            });
+        }
+    
         // Thực hiện truy vấn và lấy kết quả
         $monHocs = $query->get();
+
+        // nếu không có kết quả
+        if ($monHocs->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
         
         // Trả về dữ liệu môn học dưới dạng JSON với mã trạng thái 200
         return response()->json($monHocs, 200);

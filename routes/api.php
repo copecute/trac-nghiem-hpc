@@ -1,11 +1,13 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\Sanctum;
-use App\Http\Middleware\CheckPermission;
+
+use App\Http\Middleware\ApiAuthenticate;
+
 use App\Http\Controllers\KhoaController;
 use App\Http\Controllers\NganhController;
 use App\Http\Controllers\LopController;
 use App\Http\Controllers\SinhVienAuthController;
+use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\MonHocController;
 use App\Http\Controllers\CauHoiController;
 use App\Http\Controllers\DapAnController;
@@ -24,103 +26,113 @@ Route::get('/', function () {
 Route::post('/sinhvien/login', [SinhVienAuthController::class, 'login']);
 
 // xác thực bằng middleware auth:sanctum
-// khoa
+Route::middleware([ApiAuthenticate::class])->group(function () {
+    // Sinh viên
+    Route::prefix('sinhvien')->group(function () {
+        Route::get('/', [SinhVienController::class, 'apiIndex']); // danh sách sinh viên
+        Route::get('/{id}', [SinhVienController::class, 'apiShow']); // chi tiết sinh viên theo ID
+        // Route::post('/', [SinhVienController::class, 'apiStore']); // thêm sinh viên
+        // Route::put('/{id}', [SinhVienController::class, 'apiUpdate']); // sửa sinh viên
+        // Route::delete('/{id}', [SinhVienController::class, 'apiDestroy']); // xoá sinh viên
+        Route::get('/search', [SinhVienController::class, 'apiSearch']); // tìm kiếm sinh viên
+        
+        Route::get('/{sinhvienId}/ketqua/{dethiId}', [KetQuaController::class, 'show'])->name('api.ketqua.show'); // kết quả bài thi
+    });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/khoa', [KhoaController::class, 'apiIndex']);
+    Route::post('/ketqua', [KetQuaController::class, 'store']); // API thêm kết quả (sinhvien_id sẽ được lấy từ phiên đăng nhập)
+
+    // khoa
+    Route::prefix('khoa')->group(function () {
+        Route::get('/', [KhoaController::class, 'apiIndex']); // danh sách khoa
+        Route::get('/{id}', [KhoaController::class, 'apiShow']); // chi tiết khoa theo ID
+        // Route::post('/', [KhoaController::class, 'apiStore']); // thêm khoa
+        // Route::put('/{id}', [KhoaController::class, 'apiUpdate']); // sửa khoa
+        // Route::delete('/{id}', [KhoaController::class, 'apiDestroy']); // xoá khoa
+        Route::get('?search', [KhoaController::class, 'apiSearch']); // tìm kiếm khoa
+    });
+    
+    // Nghành
+    Route::prefix('nganh')->group(function () {
+        Route::get('/', [NganhController::class, 'apiIndex']); // danh sách ngành
+        Route::get('/{id}', [NganhController::class, 'apiShow']); // chi tiết ngành theo ID
+        Route::get('?khoa', [NganhController::class, 'apiIndexByKhoa']); // Lấy ngành học theo khoa
+        // Route::post('/', [NganhController::class, 'apiStore']); // thêm ngành
+        // Route::put('/{id}', [NganhController::class, 'apiUpdate']); // sửa ngành
+        // Route::delete('/{id}', [NganhController::class, 'apiDestroy']); // xoá ngành
+        Route::get('?search', [NganhController::class, 'apiSearch']); // tìm kiếm ngành
+    });
+    
+    // lớp
+    Route::prefix('lop')->group(function () {
+        Route::get('/', [LopController::class, 'apiIndex']); // danh sách lớp
+        Route::get('/{id}', [LopController::class, 'apiShow']); // chi tiết lớp theo ID
+        // Route::post('/', [LopController::class, 'apiStore']); // thêm lớp
+        // Route::put('/{id}', [LopController::class, 'apiUpdate']); // sửa lớp
+        // Route::delete('/{id}', [LopController::class, 'apiDestroy']); // xoá lớp
+        Route::get('?search', [LopController::class, 'apiSearch']); // tìm kiếm lớp
+    });
+    
+    // Môn học
+    Route::prefix('monhoc')->group(function () {
+        Route::get('/', [MonHocController::class, 'apiIndex']); // danh sách môn học
+        Route::get('/{id}', [MonHocController::class, 'apiShow']); // chi tiết môn học theo ID
+        // Route::post('/', [MonHocController::class, 'apiStore']); // thêm môn học
+        // Route::put('/{id}', [MonHocController::class, 'apiUpdate']); // sửa môn học
+        // Route::delete('/{id}', [MonHocController::class, 'apiDestroy']); // xoá môn học
+    });
+    
+    // câu hỏi
+    Route::prefix('cauhoi')->group(function () {
+        Route::get('/', [CauHoiController::class, 'apiIndex']); // danh sách cấu hỏi
+        Route::get('/{id}', [CauHoiController::class, 'apiShow']); // chi tiết cấu hỏi theo ID
+        // Route::post('/', [CauHoiController::class, 'apiStore']); // thêm cấu hỏi
+        // Route::put('/{id}', [CauHoiController::class, 'apiUpdate']); // sửa cấu hỏi
+        // Route::delete('/{id}', [CauHoiController::class, 'apiDestroy']); // xoá cấu hỏi
+    });
+    
+    // đáp án
+    Route::prefix('cauhoi')->group(function () {
+        Route::get('/{cauHoiId}/dapan', [DapAnController::class, 'apiIndex']); // danh sách đáp án
+        Route::get('/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiShow']); // chi tiết đáp án theo ID
+        // Route::post('/{cauHoiId}/dapan', [DapAnController::class, 'apiStore']); // thêm đáp án
+        // Route::put('/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiUpdate']); // sửa đáp án
+        // Route::delete('/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiDestroy']); // xoá đáp án
+    });
+    
+    // kỳ thi
+    Route::prefix('kythi')->group(function () {
+        Route::get('/', [KyThiController::class, 'apiIndex']); // danh sách kỳ thi
+        Route::get('/{id}', [KyThiController::class, 'apiShow']); // chi tiết kỳ thi theo ID
+        // Route::post('/', [KyThiController::class, 'apiStore']); // thêm kỳ thi
+        // Route::put('/{id}', [KyThiController::class, 'apiUpdate']); // sửa kỳ thi
+        // Route::delete('/{id}', [KyThiController::class, 'apiDestroy']); // xoá kỳ thi
+    });
+    
+    // ca thi
+    Route::prefix('kythi')->group(function () {
+        Route::get('/{kythi_id}/cathi', [CaThiController::class, 'apiIndex']); // danh sách ca thi
+        Route::get('/{kythi_id}/cathi/{id}', [CaThiController::class, 'apiShow']); // chi tiết ca thi
+        // Route::post('/{kythi_id}/cathi', [CaThiController::class, 'apiStore']); // thêm ca thi
+        // Route::put('/{kythi_id}/cathi/{id}', [CaThiController::class, 'apiUpdate']); // sửa ca thi
+        // Route::delete('/{kythi_id}/cathi/{id}', [CaThiController::class, 'apiDestroy']); // xoá ca thi
+    });
+    
+    // đề thi
+    Route::prefix('dethi')->group(function () {
+        Route::get('/', [DeThiController::class, 'apiIndex']); // danh sách đề thi
+        Route::get('/{id}', [DeThiController::class, 'apiShow']);  // chi tiết đề thi theo ID
+        // Route::post('/', [DeThiController::class, 'apiStore']); // thêm đề thi
+        // Route::put('/{id}', [DeThiController::class, 'apiUpdate']); // sửa đề thi
+        // Route::delete('/{id}', [DeThiController::class, 'apiDestroy']); // xoá đề thi
+    });
+    
+    // phòng thi
+    Route::prefix('phongthi')->group(function () {
+        Route::get('/', [PhongThiController::class, 'apiIndex']); // danh sách phần thi
+        Route::get('/{id}', [PhongThiController::class, 'apiShow']); // chi tiết phần thi theo ID
+        // Route::post('/', [PhongThiController::class, 'apiStore']); // thêm phần thi
+        // Route::put('/{id}', [PhongThiController::class, 'apiUpdate']); // sửa phần thi
+        // Route::delete('/{id}', [PhongThiController::class, 'apiDestroy']); // xoá phần thi
+    });
+
 });
-
-Route::get('/khoa/{id}', [KhoaController::class, 'apiShow']);
-// đăng nhập mới đc truy cập
-//Route::middleware('auth')->group(function () {
-    // có quyền admin mới được truy cập
-  //  Route::middleware([CheckPermission::class . ':admin'])->group(function () {
-        Route::post('/khoa', [KhoaController::class, 'apiStore']);
-        Route::put('/khoa/{id}', [KhoaController::class, 'apiUpdate']);
-        Route::delete('/khoa/{id}', [KhoaController::class, 'apiDestroy']);
-    //});
-    // có quyền user là được truy cập
-    //Route::middleware([CheckPermission::class . ':user'])->group(function () {
-        Route::get('/khoa?search', [KhoaController::class, 'apiSearch']);
-    //});
-//});
-
-
-// Nghành
-Route::get('/nganh', [NganhController::class, 'apiIndex']);
-Route::get('/nganh/{id}', [NganhController::class, 'apiShow']);
-Route::post('/nganh', [NganhController::class, 'apiStore']);
-Route::put('/nganh/{id}', [NganhController::class, 'apiUpdate']);
-Route::delete('/nganh/{id}', [NganhController::class, 'apiDestroy']);
-Route::get('/nganh/search', [NganhController::class, 'apiSearch']);
-
-// lớp
-Route::get('/lop', [LopController::class, 'apiIndex']);
-Route::get('/lop/timkiem', [LopController::class, 'apiSearch']);
-Route::get('/lop/{id}', [LopController::class, 'apiShow']);
-Route::post('/lop', [LopController::class, 'apiStore']);
-Route::put('/lop/{id}', [LopController::class, 'apiUpdate']);
-Route::delete('/lop/{id}', [LopController::class, 'apiDestroy']);
-
-
-// Môn học
-Route::prefix('monhoc')->group(function () {
-    Route::get('/', [MonHocController::class, 'apiIndex']);
-    Route::get('/{id}', [MonHocController::class, 'apiShow']);
-    Route::post('/', [MonHocController::class, 'apiStore']);
-    Route::put('/{id}', [MonHocController::class, 'apiUpdate']);
-    Route::delete('/{id}', [MonHocController::class, 'apiDestroy']);
-});
-
-// câu hỏi
-Route::middleware('auth:sanctum')->group(function () {
-Route::get('/cauhoi', [CauHoiController::class, 'apiIndex']);
-Route::get('/cauhoi/{id}', [CauHoiController::class, 'apiShow']);
-Route::post('/cauhoi', [CauHoiController::class, 'apiStore']);
-Route::put('/cauhoi/{id}', [CauHoiController::class, 'apiUpdate']);
-Route::delete('/cauhoi/{id}', [CauHoiController::class, 'apiDestroy']);
-
-// đáp án
-Route::get('/cauhoi/{cauHoiId}/dapan', [DapAnController::class, 'apiIndex']);
-Route::get('/cauhoi/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiShow']);
-Route::post('/cauhoi/{cauHoiId}/dapan', [DapAnController::class, 'apiStore']);
-Route::put('/cauhoi/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiUpdate']);
-Route::delete('/cauhoi/{cauHoiId}/dapan/{id}', [DapAnController::class, 'apiDestroy']);
-});
-
-// kỳ thi
-Route::prefix('kythi')->group(function () {
-    Route::get('/', [KyThiController::class, 'apiIndex']);
-    Route::get('/{id}', [KyThiController::class, 'apiShow']);
-    Route::post('/', [KyThiController::class, 'apiStore']);
-    Route::put('/{id}', [KyThiController::class, 'apiUpdate']);
-    Route::delete('/{id}', [KyThiController::class, 'apiDestroy']);
-});
-
-// ca thi
-Route::get('/kythi/{kythi_id}/cathi', [CaThiController::class, 'apiIndex']);
-Route::post('/kythi/{kythi_id}/cathi', [CaThiController::class, 'apiStore']);
-Route::get('/kythi/{kythi_id}/cathi/{id}', [CaThiController::class, 'apiShow']);
-Route::put('/kythi/{kythi_id}/cathi/{id}', [CaThiController::class, 'apiUpdate']);
-Route::delete('/kythi/{kythi_id}/cathi/{id}', [CaThiController::class, 'apiDestroy']);
-
-// đề thi
-Route::prefix('dethi')->group(function () {
-    Route::get('/', [DeThiController::class, 'apiIndex']);
-    Route::get('/{id}', [DeThiController::class, 'apiShow']);
-    Route::post('/', [DeThiController::class, 'apiStore']);
-    Route::put('/{id}', [DeThiController::class, 'apiUpdate']);
-    Route::delete('/{id}', [DeThiController::class, 'apiDestroy']);
-});
-
-// phòng thi
-Route::prefix('phongthi')->group(function () {
-    Route::get('/', [PhongThiController::class, 'apiIndex']);
-    Route::get('/{id}', [PhongThiController::class, 'apiShow']);
-    Route::post('/', [PhongThiController::class, 'apiStore']);
-    Route::put('/{id}', [PhongThiController::class, 'apiUpdate']);
-    Route::delete('/{id}', [PhongThiController::class, 'apiDestroy']);
-});
-
-// kết quả
-Route::get('/sinhvien/{sinhvienId}/ketqua/{dethiId}', [KetQuaController::class, 'show'])->name('api.ketqua.show');
